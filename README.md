@@ -61,7 +61,7 @@ Remove the **plane** object and follow the section **Importing the Mixed Reality
 
 #### On Ubuntu
 
-###### Step 1: ROS IP Setup
+###### Step 1: ROS-Unity Server Setup
 First find the IP address of your Ubuntu by running the following command in your Terminal
 
         hostname -I
@@ -70,7 +70,22 @@ Mention this IP in the **params.yaml** file inside the config folder of the ROS-
 
 Launch the ROS-Unity Server
 
-        roslaunch
+        roslaunch ROS-TCP-Endpoint endpoint.launch
 
-###### Step 2: 
+This will start the ROS-Unity connection Server.
+
+###### Step 2: Unity Setup
+Inside Unity, Open the Robotics/ROS Settings from the Unity menu bar, and set the ROS IP Address variable to the same IP you set inside Ubuntu.
+
+Press the **play** button and you can see the cube rotating. Press **ctrl** and use an optical mouse to click and drag the cube.
+
+###### Step 3: Launch the Drone
+Launch the sjtu drone by running the following command
+
+        roslaunch sjtu_drone simple.launch
+        
+###### Step 4: Launch the Controller
+Run the controller node by running the following command
+        
+        rosrun drone_control topic_control.py 
 
