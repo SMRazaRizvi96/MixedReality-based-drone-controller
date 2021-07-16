@@ -1,5 +1,6 @@
 # MR-based-drone-controller
 This repository contains various methods of drone control.
+This package was developed and tested on Ubuntu 18.04 and ROS Melodic.
 
 ## Setup:
 
@@ -31,7 +32,7 @@ Give running permissions to the .py files inside the drone_control package
 
 ## First Controller: Command the sjtu-drone to go to one goal point
 
-This control will allow you to give one coordinate location tot he drone, and the drone will reach and stay at the goal coordinate autonomously.
+This controller will allow you to give one coordinate location tot he drone, and the drone will reach and stay at the goal coordinate autonomously.
 
 #### Launch the sjtu-drone
 
@@ -40,5 +41,36 @@ This control will allow you to give one coordinate location tot he drone, and th
 #### Run the controller
         rosrun drone_control user_control.py 
         
+## Second Controller: Control the Drone from Unity
 
+For this type of control, you will have to run Windows in paraller with Ubuntu 18.04 with ROS Melodic installed. You can either use a virtualbox with bridged network connection, or natively run Ubuntu on a separate PC.
+
+On Windows, you will have to install the Unitu HUB with Unity 2020 or above, along with the [MRTK-Toolkit](https://docs.microsoft.com/en-us/windows/mixed-reality/develop/unity/mrtk-getting-started) for interaction.
+
+Also install the [Windows 10 SDK 10.0.18362.0](https://developer.microsoft.com/en-us/windows/downloads/windows-10-sdk/)
+
+The main idea of this type of control is to have a **cube** inside a Unity scene and you can move and drag the cube to control the drone simulation inside Gazebo.
+
+### Setup Unity:
+
+Setup the Unity scene by following the first and third tutorial from [ROS-Unity Integration](https://github.com/Unity-Technologies/Unity-Robotics-Hub/blob/main/tutorials/ros_unity_integration/README.md).
+
+Remove the **plane** object and follow the section **Importing the Mixed Reality Toolkit and Configuring the Unity project** from [this tutorial](https://docs.microsoft.com/en-us/windows/mixed-reality/develop/unity/tutorials/mr-learning-base-02?tabs=openxr) to add the Mixed Reality ToolKit to your project that will enable you to interact with the cube.
+
+### Run the controller
+
+#### On Ubuntu
+
+###### Step 1: ROS IP Setup
+First find the IP address of your Ubuntu by running the following command in your Terminal
+
+        hostname -I
+        
+Mention this IP in the **params.yaml** file inside the config folder of the ROS-TCP-Endpoint package.
+
+Launch the ROS-Unity Server
+
+        roslaunch
+
+###### Step 2: 
 
