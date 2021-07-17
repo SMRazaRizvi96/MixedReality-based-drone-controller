@@ -68,7 +68,7 @@ Mention this IP in the **params.yaml** file inside the config folder of the ROS-
 
 Launch the ROS-Unity Server
 
-        roslaunch ROS-TCP-Endpoint endpoint.launch
+        roslaunch ros_tcp_endpoint endpoint.launch
 
 This will start the ROS-Unity connection Server.
 
