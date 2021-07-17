@@ -2,6 +2,12 @@
 This repository contains various methods of drone control.
 This package was developed and tested on Ubuntu 18.04 and ROS Melodic.
 
+#### Note:
+This repository is still being developed.
+
+#### Developer:
+[Syed Muhammad Raza Rizvi](https://github.com/SMRazaRizvi96)
+
 ## Setup:
 
 #### Step 1:
