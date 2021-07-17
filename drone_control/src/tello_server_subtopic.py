@@ -59,6 +59,7 @@ def cubePos(currentcubePos):
     cube.position.z = 10*currentcubePos.pos_z
     #print("Cube x: ", cube.position.x, "Drone y: ", cube.position.y, "Drone z: ", cube.position.z)
 
+def userInput():
 
 
 def main():
@@ -97,10 +98,39 @@ def main():
 	recvThread = threading.Thread(target=recv)
 	recvThread.start()
 
-	#while True:
+	while True: 
+	    try:
+		python_version = str(platform.python_version())
+		version_init_num = int(python_version.partition('.')[0]) 
+	       # print (version_init_num)
+		if version_init_num == 3:
+		    msg = input("");
+		elif version_init_num == 2:
+		    msg = raw_input("");
+		
+		if not msg:
+		    break  
+
+		if 'track' in msg:
+		    print ('...')
+		    #sock.close()  
+		    break
+
+		# Send data
+		msg = msg.encode(encoding="utf-8") 
+		sent = sock.sendto(msg, tello_address)
+		print("Msg sent: ", msg)
+
+	    except KeyboardInterrupt:
+		print ('\n . . .\n')
+		sock.close()  
+		break
+
+
+# Sending go to commands to the Tello
 	while(not rospy.is_shutdown()):
 	    try:
-		msg = "go to " + str(cube.position.x) + " " + str(cube.position.y) + " " + str(cube.position.z) + " " + str(1)
+		msg = "go " + str(cube.position.x) + " " + str(cube.position.y) + " " + str(cube.position.z) + " " + str(1)
 		# Send data
 		msg = msg.encode(encoding="utf-8") 
 		sent = sock.sendto(msg, tello_address)
@@ -110,7 +140,7 @@ def main():
 		sock.close()  
 		break
 
-
+	
 	rospy.spin()
 
 
