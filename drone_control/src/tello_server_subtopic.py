@@ -8,6 +8,7 @@
 
 # This is a Server. TELLO has its own client.
 # Type the commands, and it will send the UDP Packets to the UDP CLients.
+# Problem to solve: Once ctrl-c from Track, you cannot type track again and go to Tracking
 
 import threading 
 import socket
@@ -61,12 +62,64 @@ def cubePos(currentcubePos):
 
 def userInput():
 
+	while True: 
+	    try:
+		python_version = str(platform.python_version())
+		version_init_num = int(python_version.partition('.')[0]) 
+	        print ('Type the commands to send to Tello\n')
+		if version_init_num == 3:
+		    msg = input("");
+		elif version_init_num == 2:
+		    msg = raw_input("");
+		
+		if not msg:
+		    break  
+
+		if 'track' in msg:
+		    print ('...')
+		    #sock.close() 
+		    break
+
+		if 'stop' in msg:
+		    print ('...')
+		    #sock.close() 
+		    break
+
+		# Send data
+		msg = msg.encode(encoding="utf-8") 
+		sent = sock.sendto(msg, tello_address)
+		print("Msg sent: ", msg)
+
+	    except KeyboardInterrupt:
+		print ('\n . . .\n')
+		#sock.close()  
+		break
+	return msg
+
+def trackCube():
+# Sending go to commands to the Tello
+
+	while(not rospy.is_shutdown()):
+	    try:
+		msg = "go " + str(cube.position.x) + " " + str(cube.position.y) + " " + str(cube.position.z) + " " + str(1)
+		# Send data
+		msg = msg.encode(encoding="utf-8")
+		time.sleep(0.5)
+		sent = sock.sendto(msg, tello_address)
+		print("Msg sent: ", msg)
+
+	    except KeyboardInterrupt:
+		print ('\n . . .\n')
+		#sock.close() 
+		check = False 
+		break
+
 
 def main():
 
 	rospy.init_node('Tello_Server')
 
-	global cube
+	global cube, sock, tello_address
 	cube = Pose()
 	#cube.position.x = 1
 	#cube.position.y = 2
@@ -98,48 +151,40 @@ def main():
 	recvThread = threading.Thread(target=recv)
 	recvThread.start()
 
-	while True: 
-	    try:
-		python_version = str(platform.python_version())
-		version_init_num = int(python_version.partition('.')[0]) 
-	       # print (version_init_num)
-		if version_init_num == 3:
-		    msg = input("");
-		elif version_init_num == 2:
-		    msg = raw_input("");
-		
-		if not msg:
-		    break  
+	msg = ""
 
-		if 'track' in msg:
-		    print ('...')
-		    #sock.close()  
-		    break
+	while(not 'stop' in msg):
+		msg = userInput()
 
-		# Send data
-		msg = msg.encode(encoding="utf-8") 
-		sent = sock.sendto(msg, tello_address)
-		print("Msg sent: ", msg)
+		if('track' in msg):
+			trackCube()
+	
+	msg = "go 0 0 0 1"
+	# Send data
+	msg = msg.encode(encoding="utf-8") 
+	sent = sock.sendto(msg, tello_address)
+	print("Msg sent: ", msg)
 
-	    except KeyboardInterrupt:
-		print ('\n . . .\n')
-		sock.close()  
-		break
+	#msg = "land"
+	# Send data
+	#msg = msg.encode(encoding="utf-8") 
+	#sent = sock.sendto(msg, tello_address)
+	#print("Msg sent: ", msg)
 
+	python_version = str(platform.python_version())
+	version_init_num = int(python_version.partition('.')[0]) 
+        print ('Type land to land and turn-off the Tello\n')
 
-# Sending go to commands to the Tello
-	while(not rospy.is_shutdown()):
-	    try:
-		msg = "go " + str(cube.position.x) + " " + str(cube.position.y) + " " + str(cube.position.z) + " " + str(1)
-		# Send data
-		msg = msg.encode(encoding="utf-8") 
-		sent = sock.sendto(msg, tello_address)
-		print("Msg sent: ", msg)
-	    except KeyboardInterrupt:
-		print ('\n . . .\n')
-		sock.close()  
-		break
+	if version_init_num == 3:
+	    msg = input("");
+	elif version_init_num == 2:
+	    msg = raw_input("");
 
+	# Send data
+	msg = msg.encode(encoding="utf-8") 
+	sent = sock.sendto(msg, tello_address)
+	print("Msg sent: ", msg)
+	sock.close()
 	
 	rospy.spin()
 
