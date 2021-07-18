@@ -8,7 +8,7 @@ The main idea of this project is to developed a Mixed-Reality based Reliable con
     Laptop
     
 ## Usage
-The drone pilot will be wearing a Hololens2 in which a Cube hologram will augment the vision of the Drone. The drone pilot can see the hologram, and also the drone in the line of sight.
+The drone pilot will be wearing a Hololens2 in which a Cube hologram will augment the vision of the Pilot. The drone pilot can see the hologram, and also the drone in the line of sight.
 In order to control the drone, the pilot only have to pick the cube hologram, and place it to where the pilot wants the drone to go, and the drone will reach the coordinate of the hologram autonomously.
 
 ## Software Architecture
