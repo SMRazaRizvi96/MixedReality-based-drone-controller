@@ -59,7 +59,7 @@ Give running permissions to the .py files inside the drone_control package
 
 ## First Controller | Simulation: Command the simulated sjtu-drone to go to one goal point
 
-This controller will allow you to give one coordinate location tot he drone, and the drone will reach and stay at the goal coordinate autonomously.
+This controller will allow you to give one coordinate location to the drone, and the drone will reach and stay at the goal coordinate autonomously.
 
 #### Launch the sjtu-drone
 
