@@ -47,7 +47,9 @@ def recv():
     while True: 
         try:
             data, server = sock.recvfrom(1518)
-            print(data.decode(encoding="utf-8"))
+	    feedback = data.decode(encoding="utf-8")
+            #print(data.decode(encoding="utf-8"))
+	    print (feedback)
         except Exception:
             print ('\nExit . . .\n')
             break
@@ -55,10 +57,9 @@ def recv():
 
 def cubePos(currentcubePos):
     
-    cube.position.x = 10*currentcubePos.pos_x
-    cube.position.y = 10*currentcubePos.pos_y
-    cube.position.z = 10*currentcubePos.pos_z
-    #print("Cube x: ", cube.position.x, "Drone y: ", cube.position.y, "Drone z: ", cube.position.z)
+    cube.position.x = 100*currentcubePos.pos_x
+    cube.position.y = 100*currentcubePos.pos_y
+    cube.position.z = 100*currentcubePos.pos_z
 
 def userInput():
 
@@ -98,16 +99,35 @@ def userInput():
 
 def trackCube():
 # Sending go to commands to the Tello
+	#global telloPose, cubePose
+	telloPose = Pose()
+	cubePose = Pose()
+	feedback = ""
 
 	while(not rospy.is_shutdown()):
 	    try:
-		msg = "go " + str(cube.position.x) + " " + str(cube.position.y) + " " + str(cube.position.z) + " " + str(1)
-		# Send data
+		cubePose = cube
+		print("Cube x: ", cubePose.position.x, " Cube y: ", cubePose.position.y)
+		print("Tello x: ", telloPose.position.x, " Tello y: ", telloPose.position.y)
+		goalPose.position.x = cubePose.position.x - telloPose.position.x
+		goalPose.position.y = cubePose.position.y - telloPose.position.y
+		goalPose.position.z = cubePose.position.z - telloPose.position.z
+		
+		if((abs(goalPose.position.x) > 5) or (abs(goalPose.position.y) >5)):
+			telloPose = cubePose
+			msg = "go " + str(math.floor(goalPose.position.x)) + " " + str(math.floor(goalPose.position.y)) + " " + str(0) + " " + str(10)
+			print("I updated msg")
+
+		
+		else:
+			msg = "stop"
+
 		msg = msg.encode(encoding="utf-8")
-		time.sleep(0.5)
+
 		sent = sock.sendto(msg, tello_address)
 		print("Msg sent: ", msg)
-
+		time.sleep(5)
+		
 	    except KeyboardInterrupt:
 		print ('\n . . .\n')
 		#sock.close() 
@@ -119,12 +139,11 @@ def main():
 
 	rospy.init_node('Tello_Server')
 
-	global cube, sock, tello_address
+	global cube, sock, tello_address, goalPose, feedback
 	cube = Pose()
-	#cube.position.x = 1
-	#cube.position.y = 2
-	#cube.position.z = 3
-
+	#telloPose = Pose()
+	goalPose = Pose()
+	
 	sub_cube = rospy.Subscriber("/pos_rot", PosRot, cubePos)
 
 	host = ''
@@ -136,7 +155,7 @@ def main():
 	sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
 	#tello_address = ('192.168.10.1', 8889)
-	tello_address = ('172.20.135.150', 8889) 
+	tello_address = ('130.251.13.108', 8889) 
 	sock.bind(locaddr)
 
 
