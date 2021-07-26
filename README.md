@@ -12,8 +12,8 @@ The drone pilot will be wearing a Hololens2 in which a Cube hologram will augmen
 In order to control the drone, the pilot only have to pick the cube hologram, and place it to where the pilot wants the drone to go, and the drone will reach the coordinate of the hologram autonomously.
 
 ## Software Specifications
-    Ubuntu 18.04 running insie a Virtual Box
-    ROS Melodic installed in Ubuntu 28.04
+    Ubuntu 18.04 running inside a Virtual Box
+    ROS Melodic installed in Ubuntu 18.04
     Unity Hub 2.4.3
     Unity 2020.3.13f1
     Visual Studio 2019
