@@ -28,6 +28,7 @@ The Unity project is not uploaded yet.
 
 #### Developer:
 [Syed Muhammad Raza Rizvi](https://github.com/SMRazaRizvi96)
+smrazarizvi96@gmail.com
 
 ## Setup:
 
