@@ -1,6 +1,6 @@
 # MR-based-drone-controller
 
-The main idea of this project is to developed a Mixed-Reality based Reliable controller for Drones.
+The main idea of this project is to developed a Mixed-Reality based Reliable controller for Drone pilots.
 
 ## Hardware
     Hololens2
@@ -8,23 +8,23 @@ The main idea of this project is to developed a Mixed-Reality based Reliable con
     Laptop
     
 ## Usage
-The drone pilot will be wearing a Hololens2 in which a Cube hologram will augment the vision of the Pilot. The drone pilot can see the hologram, and also the drone in the line of sight.
+The drone pilot will be wearing a Hololens2 in which a Cube hologram will augment the vision of the Pilot. The drone pilot can see the cube hologram, and also the drone in the line of sight.
 In order to control the drone, the pilot only have to pick the cube hologram, and place it to where the pilot wants the drone to go, and the drone will reach the coordinate of the hologram autonomously.
 
-## Software Architecture
-The Robot Operating System (ROS1) is used to design the software architecture to provide a communication between the Hololens2 and the DJI Tello drone.
-On the other hand, in order to develop the Mixed Reality scene for the Hololens2, a UNity project is created and a Universal Windows Platform application is built to be deployed on the Hololens through Visual Studio.
-
-### Specific Software Versions
-    Ubuntu 18.04 running in Virtual Box
-    ROS Melodic
+## Software Specifications
+    Ubuntu 18.04 running insie a Virtual Box
+    ROS Melodic installed in Ubuntu 28.04
     Unity Hub 2.4.3
     Unity 2020.3.13f1
     Visual Studio 2019
 
+## Software Architecture
+The Robot Operating System (ROS1) is used to design the software architecture to provide a communication between the Hololens2 and Ubuntu, and from Ubuntu to the DJI Tello drone.
+On the other hand, in order to develop the Mixed Reality scene for the Hololens2, a Unity project is created, and a Universal Windows Platform application is built to be deployed on the Hololens through Visual Studio.
 
 #### Note:
 This repository is still in the development phase. You will find various ROS nodes created for the Drone simulation, and others for the actual DJI Tello drone.
+The Unity project is not uploaded yet.
 
 #### Developer:
 [Syed Muhammad Raza Rizvi](https://github.com/SMRazaRizvi96)
@@ -35,10 +35,12 @@ This repository is still in the development phase. You will find various ROS nod
 Copy the **drone_control** package from this repository into the src folder of your ROS workspace.
 
 #### Step 2:
-Clone the [ROS-TCP-Endpoint](https://github.com/Unity-Technologies/ROS-TCP-Endpoint) into the src folder of your ROS workspace.
+Clone the [ROS-TCP-Endpoint](https://github.com/Unity-Technologies/ROS-TCP-Endpoint) into the src folder of your ROS workspace.  
+This will allow a communication between Unity and ROS.
 
 #### Step 3:
-From [ROS-Unity Integration](https://github.com/Unity-Technologies/Unity-Robotics-Hub/blob/main/tutorials/ros_unity_integration/README.md) clone the **unity_robotics_demo** and **unity_robotics_demo_msgs** packages into the src folder of your ROS workspace.
+From [ROS-Unity Integration](https://github.com/Unity-Technologies/Unity-Robotics-Hub/blob/main/tutorials/ros_unity_integration/README.md) clone the **unity_robotics_demo** and **unity_robotics_demo_msgs** packages into the src folder of your ROS workspace insude Ubuntu.  
+Supporting packages for the Unity-ROS Communication.
 
 #### Step 4:
 Clone the [sjtu-drone](https://github.com/tahsinkose/sjtu-drone) package into the src folder of your ROS workspace.
@@ -51,10 +53,7 @@ Go to your ROS Workspace through the Terminal and run the following commands:
     source devel/setup.bash
     
 #### Step 6:
-Give running permissions to the .py files inside the drone_control package
-
-        chmod +x user_control.py
-        chmod +x topic_control.py
+Give running permissions to all the .py files inside the drone_control package
 
 
 ## First Controller | Simulation: Command the simulated sjtu-drone to go to one goal point
@@ -75,7 +74,7 @@ This controller will allow you to give one coordinate location to the drone, and
         
 ## Second Controller | Simulation: Control the Simulated Drone from Unity
 
-This controller will allow you to run a Unity scene inside Unity in which you can see and move a Hologram Cube. The coordinates of this hologram will be sent through TCP from Unity to ROS, and will be used as goal coordinates for the simulated drone.
+This controller will allow you to run a Unity scene on Windows, in which you can see and move a Hologram Cube. The coordinates of this hologram will be sent through TCP from Unity to ROS, and will be used as goal coordinates for the simulated drone.
 
 For this type of control, you will have to run Windows in paraller with Ubuntu 18.04 with ROS Melodic installed. You can either use a virtualbox with bridged network connection, or natively run Ubuntu on a separate PC.
 
@@ -177,13 +176,8 @@ Build the 'Universal Windows Platform' application from Unity, and then deploy t
     
 Now you can just type the command to send and can see the DJI Tello executing these commands.
 
-## Fifth Controller | DJI Tello drone: Control the DJI Tello Drone using the tellopy library
 
-This controller is a very basic ROS node exploiting the tellopy library to send control commands to the DJI Tello drone.
-
-### Run the Controller
-
-    rosrun drone_control tello_server_library.py 
+To be continued.
 
 
 
