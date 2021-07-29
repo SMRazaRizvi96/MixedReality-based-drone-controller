@@ -56,10 +56,10 @@ def recv():
 
 
 def cubePos(currentcubePos):
-    
-    cube.position.x = 100*currentcubePos.pos_x
-    cube.position.y = 100*currentcubePos.pos_y
-    cube.position.z = 100*currentcubePos.pos_z
+    global cube
+    cube.position.x = -100*(currentcubePos.pos_z-0.5)
+    cube.position.y = 100*currentcubePos.pos_x
+    cube.position.z = 100*currentcubePos.pos_y
 
 def userInput():
 
@@ -108,14 +108,18 @@ def trackCube():
 	    try:
 		cubePose = cube
 		print("Cube x: ", cubePose.position.x, " Cube y: ", cubePose.position.y)
-		print("Tello x: ", telloPose.position.x, " Tello y: ", telloPose.position.y)
+		print("Tello x: ", telloPose.position.x, " Tello y: ", telloPose.position.y, " Tello z: ", telloPose.position.z)
 		goalPose.position.x = cubePose.position.x - telloPose.position.x
 		goalPose.position.y = cubePose.position.y - telloPose.position.y
 		goalPose.position.z = cubePose.position.z - telloPose.position.z
+		print("Goal x: ", goalPose.position.x, " Goal y: ", goalPose.position.y, " Goal z: ", goalPose.position.z)
 		
-		if((abs(goalPose.position.x) > 5) or (abs(goalPose.position.y) >5)):
-			telloPose = cubePose
-			msg = "go " + str(math.floor(goalPose.position.x)) + " " + str(math.floor(goalPose.position.y)) + " " + str(0) + " " + str(10)
+		if((abs(goalPose.position.x) > 10) or (abs(goalPose.position.y) >10)or (abs(goalPose.position.z) >10)):
+			#telloPose = cubePose
+			telloPose.position.x = cubePose.position.x
+			telloPose.position.y = cubePose.position.y
+			telloPose.position.z = cubePose.position.z
+			msg = "go " + str(math.floor(goalPose.position.x)) + " " + str(math.floor(goalPose.position.y)) + " " + str(math.floor(goalPose.position.z)) + " " + str(10)
 			print("I updated msg")
 
 		
@@ -126,7 +130,7 @@ def trackCube():
 
 		sent = sock.sendto(msg, tello_address)
 		print("Msg sent: ", msg)
-		time.sleep(5)
+		time.sleep(3)
 		
 	    except KeyboardInterrupt:
 		print ('\n . . .\n')
@@ -155,7 +159,7 @@ def main():
 	sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
 	#tello_address = ('192.168.10.1', 8889)
-	tello_address = ('130.251.13.108', 8889) 
+	tello_address = ('130.251.13.146', 8889) 
 	sock.bind(locaddr)
 
 
