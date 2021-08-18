@@ -64,11 +64,16 @@ def main():
 	# Create a UDP socket
 	sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
-	#tello_address = ('192.168.10.1', 8889)
-	tello_address = ('172.20.135.150', 8889) 
+	tello_address = ('130.251.13.108', 8889)
+	#tello_address = ('172.20.135.150', 8889) 
+	#tello_address = ('130.251.13.112', 8889)
+	#tello_address = ('130.251.6.104', 8889)
+
 	sock.bind(locaddr)
+	#sock.bind(('', 8889))
 
-
+	#sock.bind(tello_address)	
+	
 	print ('\r\n\r\nTello Python3 Demo.\r\n')
 
 	print ('Tello: command takeoff land flip forward back left right \r\n       up down cw ccw speed speed?\r\n')

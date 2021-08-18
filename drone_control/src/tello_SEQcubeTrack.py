@@ -40,6 +40,7 @@ from std_msgs.msg import String
 from std_msgs.msg import Float64
 from nav_msgs.msg import Odometry
 from unity_robotics_demo_msgs.msg import PosRot
+from unity_robotics_demo_msgs.msg import QRPose
 
 
 def recv():
@@ -58,11 +59,20 @@ def recv():
 
 def cubePos(currentcubePos):
     global cube
+    #cube.position.x = -(currentcubePos.pos_z-0.5)
     cube.position.x = -currentcubePos.pos_z
     cube.position.y = currentcubePos.pos_x
     cube.position.z = currentcubePos.pos_y
 
+def telloPos(currenttelloPos):
+    global tello
+    tello.position.x = -currenttelloPos.QR_pos_z
+    tello.position.y = currenttelloPos.QR_pos_x
+    tello.position.z = currenttelloPos.QR_pos_y
+
 def userInput():
+	global feedback
+	feedback = ''
 
 	while True: 
 	    try:
@@ -91,6 +101,8 @@ def userInput():
 		msg = msg.encode(encoding="utf-8") 
 		sent = sock.sendto(msg, tello_address)
 		print("Msg sent: ", msg)
+		#while('ok' not in feedback):
+			
 
 	    except KeyboardInterrupt:
 		print ('\n . . .\n')
@@ -100,20 +112,15 @@ def userInput():
 
 def trackCube():
 # Sending go to commands to the Tello
-	global telloPose, cubePose, feedback
+	global feedback
 	telloPose = Pose()
 	cubePose = Pose()
 	feedback = ''
-	telloPose.position.x = cube.position.x
-	telloPose.position.y = cube.position.y
-	telloPose.position.z = cube.position.z
 
 	while(not rospy.is_shutdown()):
 	    try:
-		cubePose.position.x = cube.position.x
-		cubePose.position.y = cube.position.y
-		cubePose.position.z = cube.position.z
-
+		cubePose = cube
+		telloPose = tello
 		print("Cube x: ", cubePose.position.x, " Cube y: ", cubePose.position.y)
 		print("Tello x: ", telloPose.position.x, " Tello y: ", telloPose.position.y, " Tello z: ", telloPose.position.z)
 		goalPose.position.x = 100*(cubePose.position.x - telloPose.position.x)
@@ -121,102 +128,32 @@ def trackCube():
 		goalPose.position.z = 100*(cubePose.position.z - telloPose.position.z)
 		print("Goal x: ", goalPose.position.x, " Goal y: ", goalPose.position.y, " Goal z: ", goalPose.position.z)
 		
-		#if((abs(goalPose.position.x) > ) or (abs(goalPose.position.y) >5)or (abs(goalPose.position.z) >5)):
-			#telloPose = cubePose
-			#telloPose.position.x = cubePose.position.x
-			#telloPose.position.y = cubePose.position.y
-			#telloPose.position.z = cubePose.position.z
-		#msg = "go " + str(goalPose.position.x) + " " + str(goalPose.position.y) + " " + str(goalPose.position.z) + " " + str(10)
+		if(telloPose):
 
-		if (goalPose.position.x < 0):
-
-			msg = "back " + str(abs(goalPose.position.x))
+			msg = "go " + str(math.floor(goalPose.position.x)) + " " + str(math.floor(goalPose.position.y)) + " " + str(math.floor(goalPose.position.z)) + " " + str(10)
+			#if (goalPose.position.x > 10):
+			#	msg = "go " + str(math.floor(goalPose.position.x)) + " " + str(0) + " " + str(0) + " " + str(10)
+			#elif(goalPose.position.y > 10):
+			#	msg = "go " + str(0) + " " + str(math.floor(goalPose.position.y)) + " " + str(0) + " " + str(10)
+			#elif (goalPose.position.z > 10):
+			#	msg = "go " + str(0) + " " + str(0) + " " + str(math.floor(goalPose.position.z)) + " " + str(10)
+				
 
 		else:
-			msg = "forward " + str(abs(goalPose.position.x))
-
-		print("I updated msg")
-
+			msg = "stop"
 
 		msg = msg.encode(encoding="utf-8")
-		feedback = ''
 
 		sent = sock.sendto(msg, tello_address)
 		print("Msg sent: ", msg)
+		while('ok' not in feedback and not rospy.is_shutdown()):
+			if ('error' in feedback):
+				break
+			if ('out of range' in feedback):
+				break
+			print "Waiting for OK"
+		#time.sleep(1)
 		
-		#while('ok' not in feedback and not rospy.is_shutdown()):
-		#	if ('error' in feedback):
-		#		break
-		#	if ('out of range' in feedback):
-		#		break
-		#	print "Waiting for OK"
-
-		#if ('ok' in feedback):
-		#	telloPose.position.x = cubePose.position.x
-		#	print 'Tello x Pose updated'
-
-
-		if (goalPose.position.y < 0):
-
-			msg = "left " + str(abs(goalPose.position.y))
-
-		else:
-			msg = "right " + str(abs(goalPose.position.y))
-
-		#msg = "forward " + str(goalPose.position.x)
-		print("I updated msg")
-
-
-		msg = msg.encode(encoding="utf-8")
-		feedback = ''
-
-		sent = sock.sendto(msg, tello_address)
-		print("Msg sent: ", msg)
-		
-		#while('ok' not in feedback and not rospy.is_shutdown()):
-		#	if ('error' in feedback):
-		#		break
-		#	if ('out of range' in feedback):
-		#		break
-		#	print "Waiting for OK"
-
-		#if ('ok' in feedback):
-		#	telloPose.position.y = cubePose.position.y
-		#	print 'Tello y Pose updated'
-
-
-		if (goalPose.position.z < 0):
-
-			msg = "down" + str(abs(goalPose.position.z))
-
-		else:
-			msg = "up " + str(abs(goalPose.position.z))
-
-		#msg = "forward " + str(goalPose.position.x)
-		print("I updated msg")
-
-
-		msg = msg.encode(encoding="utf-8")
-		feedback = ''
-
-		sent = sock.sendto(msg, tello_address)
-		print("Msg sent: ", msg)
-		
-		#while('ok' not in feedback and not rospy.is_shutdown()):
-		#	if ('error' in feedback):
-		#		break
-		#	if ('out of range' in feedback):
-		#		break
-		#	print "Waiting for OK"
-
-		#if ('ok' in feedback):
-		#	telloPose.position.z = cubePose.position.z
-		#	print 'Tello z Pose updated'
-
-		telloPose.position.x = cubePose.position.x
-		telloPose.position.y = cubePose.position.y
-		telloPose.position.z = cubePose.position.z
-
 	    except KeyboardInterrupt:
 		print ('\n . . .\n')
 		#sock.close() 
@@ -228,12 +165,13 @@ def main():
 
 	rospy.init_node('Tello_Server')
 
-	global cube, sock, tello_address, goalPose, feedback
+	global cube, tello, sock, tello_address, goalPose, feedback
 	cube = Pose()
-	#telloPose = Pose()
+	tello = Pose()
 	goalPose = Pose()
 	
 	sub_cube = rospy.Subscriber("/pos_rot", PosRot, cubePos)
+	sub_tello = rospy.Subscriber("/qr_code_pose", QRPose, telloPos)
 
 	host = ''
 	port = 9000
@@ -244,7 +182,7 @@ def main():
 	sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
 	#tello_address = ('192.168.10.1', 8889)
-	tello_address = ('172.20.10.3', 8889) 
+	tello_address = ('172.20.10.5', 8889) 
 	sock.bind(locaddr)
 
 
