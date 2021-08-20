@@ -134,52 +134,16 @@ def trackCube():
 
 			# For Forward and Backward
 
-			if (abs(goalPose.position.x) > 20):
+			if (abs(goalPose.position.x) < 20):
+				goalPose.position.x = 0
 
-				if (goalPose.position.x < 0):
+			if (abs(goalPose.position.y) < 20):
+				goalPose.position.y = 0
 
-					msg = "back " + str(abs(goalPose.position.x))
+			if (abs(goalPose.position.z) < 20):
+				goalPose.position.z = 0
 
-				else:
-					msg = "forward " + str(abs(goalPose.position.x))
-
-			else:
-				msg = "stop"
-
-			print("I updated msg")
-
-
-			msg = msg.encode(encoding="utf-8")
-			feedback = ''
-
-			sent = sock.sendto(msg, tello_address)
-			print("Msg sent: ", msg)
-
-			print 'Waiting for feedback'
-
-			t = time.clock()
-			elapsed = 0
-			
-			while(feedback=='' and not rospy.is_shutdown() and elapsed < 5):
-				if ('error' in feedback):
-					break
-				if ('out of range' in feedback):
-					break
-				elapsed = time.clock() - t
-
-			# Now for Left - Right
-
-			if (abs(goalPose.position.y) > 20):
-
-				if (goalPose.position.y < 0):
-
-					msg = "right " + str(abs(goalPose.position.y))
-
-				else:
-					msg = "left " + str(abs(goalPose.position.y))
-
-			else:
-				msg = "stop"
+			msg = "go " + str(goalPose.position.x) + " " + str(goalPose.position.y) + " " + str(goalPose.position.z) + " " + str(10)
 
 			print("I updated msg")
 
@@ -202,42 +166,7 @@ def trackCube():
 					break
 				elapsed = time.clock() - t
 
-			# Now for Up - Down
-
-			if (abs(goalPose.position.z) > 20):
-
-				if (goalPose.position.z < 0):
-
-					msg = "down " + str(abs(goalPose.position.z))
-
-				else:
-					msg = "up " + str(abs(goalPose.position.z))
-
-			else:
-				msg = "stop"
-
-			print("I updated msg")
-
-
-			msg = msg.encode(encoding="utf-8")
-			feedback = ''
-
-			sent = sock.sendto(msg, tello_address)
-			print("Msg sent: ", msg)
-
-			print 'Waiting for feedback'
-			
-			t = time.clock()
-			elapsed = 0
-
-			while(feedback=='' and not rospy.is_shutdown() and elapsed < 5):
-				if ('error' in feedback):
-					break
-				if ('out of range' in feedback):
-					break
-				elapsed = time.clock() - t
-
-		
+	
 	    except KeyboardInterrupt:
 		print ('\n . . .\n')
 		#sock.close() 
