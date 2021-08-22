@@ -152,20 +152,25 @@ def trackCube():
 			msg = msg.encode(encoding="utf-8")
 			feedback = ''
 
-			sent = sock.sendto(msg, tello_address)
-			print("Msg sent: ", msg)
+			i = 1
 
-			print 'Waiting for feedback'
+			if (('ok' not in feedback or 'error' in feedback) and ('out of range' not in feedback and i < 4)):
 
-			t = time.clock()
-			elapsed = 0
-			
-			while(feedback=='' and not rospy.is_shutdown() and elapsed < 5):
-				if ('error' in feedback):
-					break
-				if ('out of range' in feedback):
-					break
-				elapsed = time.clock() - t
+				sent = sock.sendto(msg, tello_address)
+				print("Msg sent: ", msg)
+
+				print 'Waiting for feedback'
+
+				t = time.clock()
+				elapsed = 0
+				i+=1
+				
+				while(feedback=='' and not rospy.is_shutdown() and elapsed < 4):
+					if ('error' in feedback):
+						break
+					if ('out of range' in feedback):
+						break
+					elapsed = time.clock() - t
 
 			# Now for Left - Right
 
@@ -187,20 +192,25 @@ def trackCube():
 			msg = msg.encode(encoding="utf-8")
 			feedback = ''
 
-			sent = sock.sendto(msg, tello_address)
-			print("Msg sent: ", msg)
+			i = 1
 
-			print 'Waiting for feedback'
+			if (('ok' not in feedback or 'error' in feedback) and ('out of range' not in feedback and i < 4)):
 
-			t = time.clock()
-			elapsed = 0
-			
-			while(feedback=='' and not rospy.is_shutdown() and elapsed < 5):
-				if ('error' in feedback):
-					break
-				if ('out of range' in feedback):
-					break
-				elapsed = time.clock() - t
+				sent = sock.sendto(msg, tello_address)
+				print("Msg sent: ", msg)
+
+				print 'Waiting for feedback'
+
+				t = time.clock()
+				elapsed = 0
+				i+=1
+				
+				while(feedback=='' and not rospy.is_shutdown() and elapsed < 5):
+					if ('error' in feedback):
+						break
+					if ('out of range' in feedback):
+						break
+					elapsed = time.clock() - t
 
 			# Now for Up - Down
 
@@ -222,20 +232,25 @@ def trackCube():
 			msg = msg.encode(encoding="utf-8")
 			feedback = ''
 
-			sent = sock.sendto(msg, tello_address)
-			print("Msg sent: ", msg)
+			i = 1
 
-			print 'Waiting for feedback'
-			
-			t = time.clock()
-			elapsed = 0
+			if (('ok' not in feedback or 'error' in feedback) and ('out of range' not in feedback and i < 4)):
 
-			while(feedback=='' and not rospy.is_shutdown() and elapsed < 5):
-				if ('error' in feedback):
-					break
-				if ('out of range' in feedback):
-					break
-				elapsed = time.clock() - t
+				sent = sock.sendto(msg, tello_address)
+				print("Msg sent: ", msg)
+
+				print 'Waiting for feedback'
+				
+				t = time.clock()
+				elapsed = 0
+				i+=1
+
+				while(feedback=='' and not rospy.is_shutdown() and elapsed < 5):
+					if ('error' in feedback):
+						break
+					if ('out of range' in feedback):
+						break
+					elapsed = time.clock() - t
 
 		
 	    except KeyboardInterrupt:
