@@ -166,6 +166,8 @@ def trackCube():
 
 			while (('error' in feedback) or (feedback == '') and (i < 4) and (abs(100*(cube.position.x - tello.position.x)) > 20) and ('stop' not in msg)):
 
+			# What happens if the difference is still greater than 20, but not exactly what you computed before? So maybe the difference in coordinate should be calculated again? Or no?
+
 				sent = sock.sendto(msg, tello_address)
 				#print("Msg sent: ", msg)
 

@@ -155,18 +155,45 @@ def trackCube():
 			sent = sock.sendto(msg, tello_address)
 			print("Msg sent: ", msg)
 
-			print 'Waiting for feedback'
+			counter = time.clock()
+			i = 1
 
-			t = time.clock()
-			elapsed = 0
-			i+=1
-			
-			while(feedback=='' and not rospy.is_shutdown() and elapsed < 4):
-				if ('error' in feedback):
-					break
-				if ('out of range' in feedback):
-					break
-				elapsed = time.clock() - t
+			while (('error' in feedback) or (feedback == '') and (i < 4)):
+				sent = sock.sendto(msg, tello_address)
+				#print("Msg sent: ", msg)
+
+				#print 'Waiting for feedback'
+
+				t = time.clock()
+				elapsed = 0
+				i+=1
+				
+				while(feedback=='' and not rospy.is_shutdown() and elapsed < 4):
+					if ('error' in feedback):
+						break
+					if ('out of range' in feedback):
+						break
+					elapsed = time.clock() - t
+
+			if ('stop' not in msg):
+				if ('ok' in feedback):
+					print('Goal reached in ', time.clock() - counter, ' seconds')
+					print('Goal Pose x: ', goalPose.position.x)
+					print('Goal Pose y: ', goalPose.position.y)
+					print('Goal Pose z: ', goalPose.position.z)
+					print('Cube Pose x: ', 100*cube.position.x)
+					print('Cube Pose y: ', 100*cube.position.y)
+					print('Cube Pose z: ', 100*cube.position.z)
+					print('Tello x: ', 100*tello.position.x)
+					print('Tello y: ', 100*tello.position.y)
+					print('Tello z: ', 100*tello.position.z)
+					print('Difference in x Coordinate: ', 100*cube.position.x-100*tello.position.x, ' cm')
+					print('Difference in y Coordinate: ', 100*cube.position.y-100*tello.position.y, ' cm')
+					print('Difference in z Coordinate: ', 100*cube.position.z-100*tello.position.z, ' cm')
+
+				else:
+					print ('Goal not reached properly because feedback = ', feedback)
+
 
 	
 	    except KeyboardInterrupt:
