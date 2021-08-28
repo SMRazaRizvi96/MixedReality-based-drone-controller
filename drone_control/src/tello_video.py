@@ -8,6 +8,7 @@
 
 # This is a Server. TELLO has its own client.
 # Type the commands, and it will send the UDP Packets to the UDP CLients.
+# Problem to solve: Once ctrl-c from Track, you cannot type track again and go to Tracking
 
 import threading 
 import socket
@@ -22,6 +23,7 @@ import random
 import actionlib
 import subprocess
 import signal
+import cv2
 
 # numpy and scipy
 import numpy as np
@@ -39,14 +41,17 @@ from std_msgs.msg import String
 from std_msgs.msg import Float64
 from nav_msgs.msg import Odometry
 from unity_robotics_demo_msgs.msg import PosRot
+from unity_robotics_demo_msgs.msg import QRPose
 
-
-def recv():
+def recv_video():
     count = 0
     while True: 
         try:
-            data, server = sock.recvfrom(1518)
-            print(data.decode(encoding="utf-8"))
+	    print 'rec'
+            data, server = sock_video.recvfrom(1518)
+	    feedback_video = data.decode(encoding="utf-8")
+            #print(data.decode(encoding="utf-8"))
+	    print (feedback_video)
         except Exception:
             print ('\nExit . . .\n')
             break
@@ -54,62 +59,44 @@ def recv():
 
 def main():
 
-	rospy.init_node('Tello_Server')
+	rospy.init_node('Tello_Video_Server')
+
+	global feedback_video,sock_video
+	feedback_video = 'Nothing'
 
 	host = ''
-	port = 9000
-	locaddr = (host,port) 
+	video_port = 11111
+	locaddr_video = (host,video_port) 
+        address_schema = 'udp://@{ip}:{port}'  # + '?overrun_nonfatal=1&fifo_size=5000'
+        address = address_schema.format(host, video_port)
 
 
 	# Create a UDP socket
-	sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-
-	tello_address = ('172.20.10.5', 8889)
-
-	sock.bind(locaddr)
+	sock_video = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+	sock_video.bind(locaddr_video)
 	
+
+
 	print ('\r\n\r\nTello Python3 Demo.\r\n')
 
 	print ('Tello: command takeoff land flip forward back left right \r\n       up down cw ccw speed speed?\r\n')
 
 	print ('end -- quit demo.\r\n')
 
-
 	#recvThread create
-	recvThread = threading.Thread(target=recv)
-	recvThread.start()
+	recvThread_video = threading.Thread(target=recv_video)
+	recvThread_video.start()
 
-	while True: 
-	    try:
-		python_version = str(platform.python_version())
-		version_init_num = int(python_version.partition('.')[0]) 
-	       # print (version_init_num)
-		if version_init_num == 3:
-		    msg = input("");
-		elif version_init_num == 2:
-		    msg = raw_input("");
-		
-		if not msg:
-		    break  
+	while(not rospy.is_shutdown()):
+		#print feedback_video
+            cap = cv2.VideoCapture(address)
 
-		if 'end' in msg:
-		    print ('...')
-		    sock.close()  
-		    break
-
-		# Send data
-		msg = msg.encode(encoding="utf-8") 
-		sent = sock.sendto(msg, tello_address)
-		print("Msg sent: ", msg)
-	    except KeyboardInterrupt:
-		print ('\n . . .\n')
-		sock.close()  
-		break
-
+	sock_video.close()
+	
 	rospy.spin()
+	return
 
 
 if __name__ == '__main__':
     main()
-
 

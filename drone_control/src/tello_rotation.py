@@ -62,6 +62,10 @@ def cubePos(currentcubePos):
     cube.position.x = -currentcubePos.pos_z
     cube.position.y = currentcubePos.pos_x
     cube.position.z = currentcubePos.pos_y
+    cube.orientation.x = currentcubePos.rot_x
+    cube.orientation.y = currentcubePos.rot_y
+    cube.orientation.z = currentcubePos.rot_z
+    cube.orientation.w = currentcubePos.rot_w
 
 def telloPos(currenttelloPos):
     global tello
@@ -71,6 +75,10 @@ def telloPos(currenttelloPos):
     tello.position.x = -currenttelloPos.QR_pos_z
     tello.position.y = currenttelloPos.QR_pos_x + 0.1
     tello.position.z = currenttelloPos.QR_pos_y + 0.05
+    tello.orientation.x = currenttelloPos.QR_rot_x
+    tello.orientation.y = currenttelloPos.QR_rot_y
+    tello.orientation.z = currenttelloPos.QR_rot_z
+    tello.orientation.w = currenttelloPos.QR_rot_w
 
 def userInput():
 	global feedback
@@ -118,19 +126,25 @@ def trackCube():
 	telloPose = Pose()
 	cubePose = Pose()
 	feedback = ''
+	g = 0
 
 	while(not rospy.is_shutdown()):
 	    try:
 		cubePose = cube
 		telloPose = tello
-		print("Cube x: ", cubePose.position.x, " Cube y: ", cubePose.position.y, " Cube z: ", cubePose.position.z)
-		print("Tello x: ", telloPose.position.x, " Tello y: ", telloPose.position.y, " Tello z: ", telloPose.position.z)
+		#print("Cube x: ", cubePose.position.x, " Cube y: ", cubePose.position.y, " Cube z: ", cubePose.position.z)
+		#print("Tello x: ", telloPose.position.x, " Tello y: ", telloPose.position.y, " Tello z: ", telloPose.position.z)
 		goalPose.position.x = 100*(cubePose.position.x - telloPose.position.x)
 		goalPose.position.y = 100*(cubePose.position.y - telloPose.position.y)
 		goalPose.position.z = 100*(cubePose.position.z - telloPose.position.z)
-		print("Goal x: ", goalPose.position.x, " Goal y: ", goalPose.position.y, " Goal z: ", goalPose.position.z)
+		#print("Goal x: ", goalPose.position.x, " Goal y: ", goalPose.position.y, " Goal z: ", goalPose.position.z)
+
 		
 		if(telloPose):
+
+			if (abs(goalPose.position.x) > 20 or abs(goalPose.position.y) > 20 or abs(goalPose.position.z) > 20):
+				g+=1
+				print ('Goal Command: ', g)
 
 			# For Forward and Backward
 
@@ -146,20 +160,26 @@ def trackCube():
 			else:
 				msg = "stop"
 
-			print("I updated msg")
+			#print("I updated msg")
 
 
 			msg = msg.encode(encoding="utf-8")
 			feedback = ''
 
 			i = 1
+			
+			counter = time.clock()
 
-			if (('ok' not in feedback or 'error' in feedback) and ('out of range' not in feedback and i < 4)):
+			#while (('ok' not in feedback or 'error' in feedback) and ('out of range' not in feedback and i < 4)):
+
+			while (('error' in feedback) or (feedback == '') and (i < 4) and (abs(100*(cube.position.x - tello.position.x)) > 20) and ('stop' not in msg)):
+
+			# What happens if the difference is still greater than 20, but not exactly what you computed before? So maybe the difference in coordinate should be calculated again? Or no?
 
 				sent = sock.sendto(msg, tello_address)
-				print("Msg sent: ", msg)
+				#print("Msg sent: ", msg)
 
-				print 'Waiting for feedback'
+				#print 'Waiting for feedback'
 
 				t = time.clock()
 				elapsed = 0
@@ -171,6 +191,17 @@ def trackCube():
 					if ('out of range' in feedback):
 						break
 					elapsed = time.clock() - t
+
+			if ('stop' not in msg):
+				if ('ok' in feedback):
+					print('X Coordinate reached in ', time.clock() - counter, ' seconds')
+					print('Goal x: ', goalPose.position.x)
+					print('Cube x: ', 100*cube.position.x)
+					print('Tello x: ', 100*tello.position.x)
+					print('Difference in x Coordinate: ', 100*cube.position.x-100*tello.position.x, ' cm')
+
+				else:
+					print ('X Coordinate not reached properly because feedback = ', feedback)
 
 			# Now for Left - Right
 
@@ -186,7 +217,7 @@ def trackCube():
 			else:
 				msg = "stop"
 
-			print("I updated msg")
+			#print("I updated msg")
 
 
 			msg = msg.encode(encoding="utf-8")
@@ -194,12 +225,14 @@ def trackCube():
 
 			i = 1
 
-			if (('ok' not in feedback or 'error' in feedback) and ('out of range' not in feedback and i < 4)):
+			counter = time.clock()
+
+			while (('error' in feedback) or (feedback == '') and (i < 4) and  (abs(100*(cube.position.y - tello.position.y)) > 20) and ('stop' not in msg)):
 
 				sent = sock.sendto(msg, tello_address)
-				print("Msg sent: ", msg)
+				#print("Msg sent: ", msg)
 
-				print 'Waiting for feedback'
+				#print 'Waiting for feedback'
 
 				t = time.clock()
 				elapsed = 0
@@ -211,6 +244,18 @@ def trackCube():
 					if ('out of range' in feedback):
 						break
 					elapsed = time.clock() - t
+
+			if ('stop' not in msg):
+
+				if ('ok' in feedback):
+					print('Y Coordinate reached in ', time.clock() - counter, ' seconds')
+					print('Goal y: ', goalPose.position.y)
+					print('Cube y: ', 100*cube.position.y)
+					print('Tello y: ', 100*tello.position.y)
+					print('Difference in y Coordinate: ', 100*cube.position.y-100*tello.position.y, ' cm')
+
+				else:
+					print ('Y Coordinate not reached properly because feedback = ', feedback)
 
 			# Now for Up - Down
 
@@ -226,7 +271,7 @@ def trackCube():
 			else:
 				msg = "stop"
 
-			print("I updated msg")
+			#print("I updated msg")
 
 
 			msg = msg.encode(encoding="utf-8")
@@ -234,12 +279,14 @@ def trackCube():
 
 			i = 1
 
-			if (('ok' not in feedback or 'error' in feedback) and ('out of range' not in feedback and i < 4)):
+			counter = time.clock()
+
+			while (('error' in feedback) or (feedback == '') and (i < 4) and (abs(100*(cube.position.z - tello.position.z)) > 20) and ('stop' not in msg)):
 
 				sent = sock.sendto(msg, tello_address)
-				print("Msg sent: ", msg)
+				#print("Msg sent: ", msg)
 
-				print 'Waiting for feedback'
+				#print 'Waiting for feedback'
 				
 				t = time.clock()
 				elapsed = 0
@@ -251,6 +298,18 @@ def trackCube():
 					if ('out of range' in feedback):
 						break
 					elapsed = time.clock() - t
+
+
+			if ('stop' not in msg):
+				if ('ok' in feedback):
+					print('Z Coordinate reached in ', time.clock() - counter, ' seconds')
+					print('Goal z: ', goalPose.position.z)
+					print('Cube z: ', 100*cube.position.z)
+					print('Tello z: ', 100*tello.position.z)
+					print('Difference in z Coordinate: ', 100*cube.position.z-100*tello.position.z, ' cm')
+
+				else:
+					print ('Z Coordinate not reached properly because feedback = ', feedback)
 
 		
 	    except KeyboardInterrupt:
@@ -336,5 +395,6 @@ def main():
 
 if __name__ == '__main__':
     main()
+
 
 

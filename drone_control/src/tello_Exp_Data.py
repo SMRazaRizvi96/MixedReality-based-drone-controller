@@ -41,6 +41,7 @@ from std_msgs.msg import Float64
 from nav_msgs.msg import Odometry
 from drone_control.msg import TargetPose
 from drone_control.msg import QRPose
+from drone_control.msg import StatusColor
 
 
 def recv():
@@ -114,7 +115,7 @@ def userInput():
 
 def trackCube():
 # Sending go to commands to the Tello
-	global feedback
+	global feedback, pub_status
 	telloPose = Pose()
 	cubePose = Pose()
 	feedback = ''
@@ -137,6 +138,12 @@ def trackCube():
 			if (abs(goalPose.position.x) > 20 or abs(goalPose.position.y) > 20 or abs(goalPose.position.z) > 20):
 				g+=1
 				print ('Goal Command: ', g)
+			        color = StatusColor(255, 0, 0, 1)
+				pub_status.publish(color)
+
+			else:
+			        color = StatusColor(0, 255, 0, 1)
+				pub_status.publish(color)
 
 			# For Forward and Backward
 
@@ -315,13 +322,15 @@ def main():
 
 	rospy.init_node('Tello_Server')
 
-	global cube, tello, sock, tello_address, goalPose, feedback
+	global cube, tello, sock, tello_address, goalPose, feedback, pub_status
 	cube = Pose()
 	tello = Pose()
 	goalPose = Pose()
 	
 	sub_cube = rospy.Subscriber("/target_pose", TargetPose, cubePos)
 	sub_tello = rospy.Subscriber("/qr_code_pose", QRPose, telloPos)
+   	 #pub = rospy.Publisher(TOPIC_NAME, UnityColor, queue_size=10)
+	pub_status = rospy.Publisher("/status_color", StatusColor,queue_size=10)
 
 	host = ''
 	port = 9000

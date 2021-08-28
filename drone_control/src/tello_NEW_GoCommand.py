@@ -121,16 +121,16 @@ def trackCube():
 
 	while(not rospy.is_shutdown()):
 	    try:
-		cubePose = cube
-		telloPose = tello
-		print("Cube x: ", cubePose.position.x, " Cube y: ", cubePose.position.y, " Cube z: ", cubePose.position.z)
-		print("Tello x: ", telloPose.position.x, " Tello y: ", telloPose.position.y, " Tello z: ", telloPose.position.z)
-		goalPose.position.x = 100*(cubePose.position.x - telloPose.position.x)
-		goalPose.position.y = 100*(cubePose.position.y - telloPose.position.y)
-		goalPose.position.z = 100*(cubePose.position.z - telloPose.position.z)
-		print("Goal x: ", goalPose.position.x, " Goal y: ", goalPose.position.y, " Goal z: ", goalPose.position.z)
-		
+
 		if(telloPose):
+
+			#cubePose = cube
+			#telloPose = tello
+			print("Cube x: ", cube.position.x, " Cube y: ", cube.position.y, " Cube z: ", cube.position.z)
+			print("Tello x: ", tello.position.x, " Tello y: ", tello.position.y, " Tello z: ", tello.position.z)
+			goalPose.position.x = 100*(cube.position.x - tello.position.x)
+			goalPose.position.y = 100*(cube.position.y - tello.position.y)
+			goalPose.position.z = 100*(cube.position.z - tello.position.z)
 
 			# For Forward and Backward
 
@@ -143,56 +143,53 @@ def trackCube():
 			if (abs(goalPose.position.z) < 20):
 				goalPose.position.z = 0
 
-			msg = "go " + str(goalPose.position.x) + " " + str(goalPose.position.y) + " " + str(goalPose.position.z) + " " + str(10)
+			if ((goalPose.position.x == 0) and (goalPose.position.y == 0) and (goalPose.position.z == 0)):
+				msg = "stop"
 
-			print("I updated msg")
+			else:
+				msg = "go " + str(goalPose.position.x) + " " + str(goalPose.position.y) + " " + str(goalPose.position.z) + " " + str(10)
 
+			print msg
+
+			#print("I updated msg")
 
 			msg = msg.encode(encoding="utf-8")
 			feedback = ''
 			
 
-			sent = sock.sendto(msg, tello_address)
-			print("Msg sent: ", msg)
-
 			counter = time.clock()
-			i = 1
 
-			while (('error' in feedback) or (feedback == '') and (i < 4)):
-				sent = sock.sendto(msg, tello_address)
-				#print("Msg sent: ", msg)
+			sent = sock.sendto(msg, tello_address)
+			#print("Msg sent: ", msg)
 
-				#print 'Waiting for feedback'
+			t = time.clock()
+			elapsed = 0
+			
+			while(('error' in feedback) or (feedback == '') and (not rospy.is_shutdown()) and (elapsed < 5)):
+				if ('error' in feedback):
+					break
+				if ('out of range' in feedback):
+					break
+				elapsed = time.clock() - t
 
-				t = time.clock()
-				elapsed = 0
-				i+=1
-				
-				while(feedback=='' and not rospy.is_shutdown() and elapsed < 4):
-					if ('error' in feedback):
-						break
-					if ('out of range' in feedback):
-						break
-					elapsed = time.clock() - t
 
-			if ('stop' not in msg):
-				if ('ok' in feedback):
-					print('Goal reached in ', time.clock() - counter, ' seconds')
-					print('Goal Pose x: ', goalPose.position.x)
-					print('Goal Pose y: ', goalPose.position.y)
-					print('Goal Pose z: ', goalPose.position.z)
-					print('Cube Pose x: ', 100*cube.position.x)
-					print('Cube Pose y: ', 100*cube.position.y)
-					print('Cube Pose z: ', 100*cube.position.z)
-					print('Tello x: ', 100*tello.position.x)
-					print('Tello y: ', 100*tello.position.y)
-					print('Tello z: ', 100*tello.position.z)
-					print('Difference in x Coordinate: ', 100*cube.position.x-100*tello.position.x, ' cm')
-					print('Difference in y Coordinate: ', 100*cube.position.y-100*tello.position.y, ' cm')
-					print('Difference in z Coordinate: ', 100*cube.position.z-100*tello.position.z, ' cm')
+			if ('ok' in feedback):
+				print('Goal reached in ', time.clock() - counter, ' seconds')
+				print('Goal Pose x: ', goalPose.position.x)
+				print('Goal Pose y: ', goalPose.position.y)
+				print('Goal Pose z: ', goalPose.position.z)
+				print('Cube Pose x: ', 100*cube.position.x)
+				print('Cube Pose y: ', 100*cube.position.y)
+				print('Cube Pose z: ', 100*cube.position.z)
+				print('Tello x: ', 100*tello.position.x)
+				print('Tello y: ', 100*tello.position.y)
+				print('Tello z: ', 100*tello.position.z)
+				print('Difference in x Coordinate: ', 100*cube.position.x-100*tello.position.x, ' cm')
+				print('Difference in y Coordinate: ', 100*cube.position.y-100*tello.position.y, ' cm')
+				print('Difference in z Coordinate: ', 100*cube.position.z-100*tello.position.z, ' cm')
 
-				else:
-					print ('Goal not reached properly because feedback = ', feedback)
+			else:
+				print ('Goal not reached properly because feedback = ', feedback)
 
 
 	
@@ -241,7 +238,7 @@ def main():
 
 	msg = ""
 
-	while(not 'stop' in msg):
+	while(not 'stop' in msg and not rospy.is_shutdown()):
 		msg = userInput()
 
 		if('track' in msg):
@@ -273,7 +270,7 @@ def main():
 	sent = sock.sendto(msg, tello_address)
 	print("Msg sent: ", msg)
 	sock.close()
-	
+
 	rospy.spin()
 
 

@@ -31,6 +31,8 @@ import numpy as np
 import roslib
 import rospy
 
+from tello import Tello
+
 # Ros Messages
 
 from geometry_msgs.msg import Twist, Point, Pose
