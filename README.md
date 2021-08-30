@@ -24,7 +24,6 @@ On the other hand, in order to develop the Mixed Reality scene for the Hololens2
 
 #### Note:
 This repository is still in the development phase. You will find various ROS nodes created for the Drone simulation, and others for the actual DJI Tello drone.
-The Unity project is not uploaded yet.
 
 #### Developer:
 [Syed Muhammad Raza Rizvi](https://github.com/SMRazaRizvi96)
@@ -34,6 +33,7 @@ smrazarizvi96@gmail.com
 
 #### Step 1:
 Copy the **drone_control** package from this repository into the src folder of your ROS workspace.
+Copy the **Mixed-Reality Controller** package fromthis repository into your windows.
 
 #### Step 2:
 Clone the [ROS-TCP-Endpoint](https://github.com/Unity-Technologies/ROS-TCP-Endpoint) into the src folder of your ROS workspace.  
