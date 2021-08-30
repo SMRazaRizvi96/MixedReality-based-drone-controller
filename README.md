@@ -33,7 +33,7 @@ smrazarizvi96@gmail.com
 
 #### Step 1:
 Copy the **drone_control** package from this repository into the src folder of your ROS workspace.
-Copy the **Mixed-Reality Controller** package fromthis repository into your windows.
+Copy the **MR-ControllerHololens** Unity project from this repository into your windows.
 
 #### Step 2:
 Clone the [ROS-TCP-Endpoint](https://github.com/Unity-Technologies/ROS-TCP-Endpoint) into the src folder of your ROS workspace.  
