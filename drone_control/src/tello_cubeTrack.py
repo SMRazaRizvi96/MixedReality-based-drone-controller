@@ -39,8 +39,7 @@ from std_msgs.msg import Empty
 from std_msgs.msg import String
 from std_msgs.msg import Float64
 from nav_msgs.msg import Odometry
-from unity_robotics_demo_msgs.msg import PosRot
-from unity_robotics_demo_msgs.msg import QRPose
+from sensor_msgs.msg import Image
 
 
 def recv():
