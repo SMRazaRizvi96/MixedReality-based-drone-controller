@@ -80,14 +80,22 @@ def main():
 	TelloPose = Pose()
 	realMarker = Marker()
 	ID1 = offsets()
-	ID1.x =0.525413
-	ID1.y =0.0017
-	ID1.z =-0.1676
+	#ID1.x =0.525413
+	#ID1.y =0.0017
+	#ID1.z =-0.1676
+	
+	ID1.x =0.457503
+	ID1.y =0.275907
+	ID1.z =-0.37343
 	
 	ID10 = offsets()
-	ID10.x =1.0783
-	ID10.y =-0.000827
-	ID10.z =-0.2089
+	#ID10.x =1.0783
+	#ID10.y =-0.000827
+	#ID10.z =-0.2089
+	
+	ID10.x =1.1789
+	ID10.y =0.198291
+	ID10.z =-0.39814
 
 	while(not rospy.is_shutdown()):
 		a = 1
