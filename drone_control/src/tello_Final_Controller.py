@@ -1,15 +1,5 @@
 #!/usr/bin/env python3
 
-# Tello Python3 Control Demo 
-#
-# http://www.ryzerobotics.com/
-#
-# 1/1/2018
-
-# This is a Server. TELLO has its own client.
-# Type the commands, and it will send the UDP Packets to the UDP CLients.
-# Problem to solve: Once ctrl-c from Track, you cannot type track again and go to Tracking
-
 import threading 
 import socket
 import sys
@@ -43,6 +33,14 @@ from drone_control.msg import TargetPose
 from drone_control.msg import QRPose
 from drone_control.msg import StatusColor
 from visualization_msgs.msg import Marker
+from tello_driver.msg import TelloStatus
+
+
+class offsets:
+	def __init__(self):
+		self.x= 0
+		self.y= 0
+		self.z= 0
 
 
 def hologramPos(currenthologramPos):
@@ -52,38 +50,51 @@ def hologramPos(currenthologramPos):
     hologram.position.z = currenthologramPos.pos_z
 
 def telloPos(currenttelloPos):
-    global tello
-    tello.position.x = -currenttelloPos.position.x
-    tello.position.y = currenttelloPos.position.y
-    tello.position.z = currenttelloPos.position.z
+	global tello
+	tello.position.x = currenttelloPos.position.x
+	tello.position.y = currenttelloPos.position.y
+	tello.position.z = currenttelloPos.position.z
 
+	if('track' in msg):
+		 track_thread = threading.Thread(target=hologramTrack)
+		 track_thread.start()
+    
+       
+def telloStat(newStatus):
+    global telloStatus
+    telloStatus = newStatus
+    
 
 def hologramTrack():
 	
 	global tello, hologram, pub_vel, drone_vel, goalPose, msg
 
-	while(not rospy.is_shutdown() and 'stop' not in msg):
-		try:
-			if(tello):
-				goalPose.position.x = 1*(hologram.position.x - tello.position.x)
-				goalPose.position.y = 1*(hologram.position.y - tello.position.y)
-				goalPose.position.z = 1*(hologram.position.z - tello.position.z)
-				#print("Goal x: ", goalPose.position.x, " Goal y: ", goalPose.position.y, " Goal z: ", goalPose.position.z)
 
-				drone_vel.linear.x = -goalPose.position.x
-				drone_vel.linear.y = -goalPose.position.z
-				drone_vel.linear.z = goalPose.position.y
-				pub_vel.publish(drone_vel)
-				tello = Pose()
-				
-			else:
-				drone_vel.linear.x = 0
-				drone_vel.linear.y = 0
-				drone_vel.linear.z = 0
-				pub_vel.publish(drone_vel)
-		
-		except KeyboardInterrupt:
-			print ('\n . . .\n')
+	if(not rospy.is_shutdown() and 'stop' not in msg):
+	
+		goalPose.position.x = hologram.position.x - tello.position.x
+		goalPose.position.y = hologram.position.y - tello.position.y
+		goalPose.position.z = hologram.position.z - tello.position.z
+		print("\nGoal x: ", goalPose.position.x, " Goal y: ", goalPose.position.y, " Goal z: ", goalPose.position.z)
+			
+		if(abs(goalPose.position.x) <= 0.2):
+			goalPose.position.x = 0
+			
+		if(abs(goalPose.position.y) <= 0.2):
+			goalPose.position.y = 0
+			
+		if(abs(goalPose.position.z) <= 0.2):
+			goalPose.position.z = 0
+			
+			
+		drone_vel.linear.x = -(speed)*goalPose.position.x
+		drone_vel.linear.y = -(speed)*goalPose.position.z
+		drone_vel.linear.z = (speed)*goalPose.position.y
+		pub_vel.publish(drone_vel)
+		print('\nX Vel: ',drone_vel.linear.x, 'Y Vel: ',drone_vel.linear.y, 'Z Vel: ',drone_vel.linear.z)
+		time.sleep(0.5)
+		pub_vel.publish(zero_vel)
+		flag = 0
 			
 	drone_vel.linear.x = 0
 	drone_vel.linear.y = 0
@@ -97,23 +108,48 @@ def main():
 
 	rospy.init_node('Tello_Server')
 
-	global hologram, tello, goalPose, Marker, takeOff, pub_vel, drone_vel, msg
+	global hologram, tello, goalPose, Marker, takeOff, pub_vel, drone_vel, zero_vel, msg, telloStatus, ID1, ID10, realMarker, pub_tellopose, speed
 	hologram = Pose()
 	tello = Pose()
 	goalPose = Pose()
 	takeOff = Empty()
 	land = Empty()
 	drone_vel = Twist()
+	zero_vel = Twist()
+	telloStatus = TelloStatus()
+	realMarker = Marker()
 	msg = ''
+	speed = 1
 	
+	# Subscribed Topics
 	sub_hologram = rospy.Subscriber("/target_pose", TargetPose, hologramPos)
 	sub_tello = rospy.Subscriber("/tello/ArucoPose", Pose, telloPos)
+	#sub_ArPose = rospy.Subscriber("/aruco_single/marker", Marker, telloPose)
+	sub_tello_status = rospy.Subscriber("/tello/status", TelloStatus, telloStat)
+	
+	
+	# Published Topics
 	pub_takeOff = rospy.Publisher("/tello/takeoff", Empty, queue_size=10)
 	pub_vel = rospy.Publisher("/tello/cmd_vel", Twist, queue_size=10)
 	pub_land = rospy.Publisher("/tello/land", Empty, queue_size=10)
+	pub_tellopose = rospy.Publisher("/tello/ArucoPose", Pose,queue_size=10)
+	
+	zero_vel.linear.x = 0
+	zero_vel.linear.y = 0
+	zero_vel.linear.z = 0
+	
+	ID1 = offsets()
+	ID1.x =0.457503
+	ID1.y =0.275907
+	ID1.z =-0.37343
+	
+	ID10 = offsets()
+	ID10.x =1.1789
+	ID10.y =0.198291
+	ID10.z =-0.39814
 
 
-	while(not 'stop' in msg):
+	while(not 'stop' in msg and not rospy.is_shutdown()):
 		print ("Please type 'takeoff' OR 'land' OR 'track' \n")
 		msg = input("");
 
@@ -122,10 +158,11 @@ def main():
 			
 		elif('land' in msg):
 			pub_land.publish(land)
+			break
 			
-		elif('track' in msg):
-			hologramTrack()
-			msg = 'land'
+		#elif('track' in msg):
+			#hologramTrack()
+			#msg = 'land'
 			
 		elif('up' in msg):
 			drone_vel.linear.x = 0
@@ -199,9 +236,17 @@ def main():
 			drone_vel.linear.z = 0
 			pub_vel.publish(drone_vel)
 			
-
-	pub_land.publish(land)
-	time.sleep(3)
+			
+	drone_vel.linear.x = 0
+	drone_vel.linear.y = 0
+	drone_vel.linear.z = 0
+	pub_vel.publish(drone_vel)
+	
+	while(telloStatus.is_flying):
+		pub_land.publish(land)
+		time.sleep(2)
+	
+	print("Tello has Landed")
 	return
 	
 	#rospy.spin()
