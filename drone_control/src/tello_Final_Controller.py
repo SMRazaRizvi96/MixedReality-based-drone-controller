@@ -77,23 +77,24 @@ def hologramTrack():
 		goalPose.position.z = hologram.position.z - tello.position.z
 		print("\nGoal x: ", goalPose.position.x, " Goal y: ", goalPose.position.y, " Goal z: ", goalPose.position.z)
 			
-		if(abs(goalPose.position.x) <= 0.2):
-			goalPose.position.x = 0
+		#if(abs(goalPose.position.x) <= 0.1):
+		#	goalPose.position.x = 0
 			
-		if(abs(goalPose.position.y) <= 0.2):
-			goalPose.position.y = 0
+		#if(abs(goalPose.position.y) <= 0.1):
+		#	goalPose.position.y = 0
 			
-		if(abs(goalPose.position.z) <= 0.2):
-			goalPose.position.z = 0
+		#if(abs(goalPose.position.z) <= 0.1):
+		#	goalPose.position.z = 0
 			
 			
 		drone_vel.linear.x = -(speed)*goalPose.position.x
 		drone_vel.linear.y = -(speed)*goalPose.position.z
-		drone_vel.linear.z = (speed)*goalPose.position.y
+		drone_vel.linear.z = (speed + 0.3)*goalPose.position.y
 		pub_vel.publish(drone_vel)
 		print('\nX Vel: ',drone_vel.linear.x, 'Y Vel: ',drone_vel.linear.y, 'Z Vel: ',drone_vel.linear.z)
-		time.sleep(0.5)
-		pub_vel.publish(zero_vel)
+		#time.sleep(0.5)
+		time.sleep(0.4)
+		#pub_vel.publish(zero_vel)
 		flag = 0
 			
 	drone_vel.linear.x = 0
@@ -119,7 +120,7 @@ def main():
 	telloStatus = TelloStatus()
 	realMarker = Marker()
 	msg = ''
-	speed = 1
+	speed =1.2
 	
 	# Subscribed Topics
 	sub_hologram = rospy.Subscriber("/target_pose", TargetPose, hologramPos)
@@ -137,20 +138,10 @@ def main():
 	zero_vel.linear.x = 0
 	zero_vel.linear.y = 0
 	zero_vel.linear.z = 0
-	
-	ID1 = offsets()
-	ID1.x =0.457503
-	ID1.y =0.275907
-	ID1.z =-0.37343
-	
-	ID10 = offsets()
-	ID10.x =1.1789
-	ID10.y =0.198291
-	ID10.z =-0.39814
 
 
 	while(not 'stop' in msg and not rospy.is_shutdown()):
-		print ("Please type 'takeoff' OR 'land' OR 'track' \n")
+		print ("\nPlease type 'takeoff' OR 'land' OR 'track' OR 'stop' \n")
 		msg = input("");
 
 		if('takeoff' in msg):

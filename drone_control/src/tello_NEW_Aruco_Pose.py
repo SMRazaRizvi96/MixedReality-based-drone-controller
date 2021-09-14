@@ -47,32 +47,51 @@ def AruCoPose(newArPose):
 
 	#global realMarker
 	#realMarker = Marker()
-	global count, lastPose
+	global count, lastPose, average
 	realMarker.id = newArPose.id
-	count+=1
+	#average = Marker()
 	
 	if(realMarker.id == 1):
-		realMarker.pose.position.x = ID1.x + newArPose.pose.position.x
-		realMarker.pose.position.y = ID1.y + newArPose.pose.position.y
-		realMarker.pose.position.z = ID1.z + newArPose.pose.position.z
-		
-	elif(realMarker.id == 10):
+		realMarker.pose.position.x = newArPose.pose.position.x
+		realMarker.pose.position.y = newArPose.pose.position.y
+		realMarker.pose.position.z = newArPose.pose.position.z
+	
+	if(realMarker.id == 10):
 		realMarker.pose.position.x = ID10.x + newArPose.pose.position.x
 		realMarker.pose.position.y = ID10.y + newArPose.pose.position.y
 		realMarker.pose.position.z = ID10.z + newArPose.pose.position.z
+		
+	elif(realMarker.id == 20):
+		realMarker.pose.position.x = ID20.x + newArPose.pose.position.x
+		realMarker.pose.position.y = ID20.y + newArPose.pose.position.y
+		realMarker.pose.position.z = ID20.z + newArPose.pose.position.z
+		
+	elif(realMarker.id == 30):
+		realMarker.pose.position.x = ID30.x + newArPose.pose.position.x
+		realMarker.pose.position.y = ID30.y + newArPose.pose.position.y
+		realMarker.pose.position.z = ID30.z + newArPose.pose.position.z
 
+
+	realMarker.pose.position.x = ID1.x + realMarker.pose.position.x
+	realMarker.pose.position.y = ID1.y + realMarker.pose.position.y
+	realMarker.pose.position.z = ID1.z + realMarker.pose.position.z
 	
 	if(count < 5 and (abs(lastPose.position.x - realMarker.pose.position.x) < sensitivity and abs(lastPose.position.y - realMarker.pose.position.y) < sensitivity and abs(lastPose.position.z - realMarker.pose.position.z) < sensitivity)):
 		average.pose.position.x = average.pose.position.x + realMarker.pose.position.x
 		average.pose.position.y = average.pose.position.y + realMarker.pose.position.y
 		average.pose.position.z = average.pose.position.z + realMarker.pose.position.z
+		
+		count+=1
 	
 	elif(count ==5):
-		average.pose.position.x = average.pose.position.x/5
-		average.pose.position.y = average.pose.position.y/5
-		average.pose.position.z = average.pose.position.z/5	
-		TelloPose.position = average.pose.position
+		#average.pose.position.x = average.pose.position.x/5
+		#average.pose.position.y = average.pose.position.y/5
+		#average.pose.position.z = average.pose.position.z/5	
+		TelloPose.position.x = average.pose.position.x/5
+		TelloPose.position.y = average.pose.position.y/5
+		TelloPose.position.z = average.pose.position.z/5
 		pub_tellopose.publish(TelloPose)
+		average = Marker()
 		count = 0
 				
 		print('Tello ID: ', realMarker.id,'\n')
@@ -80,13 +99,15 @@ def AruCoPose(newArPose):
 		print('Tello Code Position y: ', realMarker.pose.position.y,'\n')
 		print('Tello Position z: ', realMarker.pose.position.z,'\n')
 		
-	lastPose= realMarker.pose
+	lastPose.position.x= realMarker.pose.position.x
+	lastPose.position.y= realMarker.pose.position.y
+	lastPose.position.z= realMarker.pose.position.z
 	
 def main():
 
 	rospy.init_node('tello_Aruco_Pose')
 	
-	global ID1, ID10, realMarker, TelloPose, pub_tellopose, lastPose, average, count, sensitivity
+	global ID1, ID10, ID20, ID30, realMarker, TelloPose, pub_tellopose, lastPose, average, count, sensitivity
 
 	sub_ArPose = rospy.Subscriber("/aruco_single/marker", Marker, AruCoPose)
 
@@ -97,24 +118,31 @@ def main():
 	realMarker = Marker()
 	average = Marker()
 	ID1 = offsets()
+	ID10 = offsets()
+	ID20 = offsets()
+	ID30 = offsets()
 	count = 0
 	sensitivity = 0.3
-	#ID1.x =0.525413
-	#ID1.y =0.0017
-	#ID1.z =-0.1676
 	
-	ID1.x =0.457503
-	ID1.y =0.275907
-	ID1.z =-0.37343
+	#ID1.x =0.529883 - 0.1
+	#ID1.y =0.006598 + 0.2
+	#ID1.z =-0.16592 - 0.2
 	
-	ID10 = offsets()
-	#ID10.x =1.0783
-	#ID10.y =-0.000827
-	#ID10.z =-0.2089
+	ID1.x =0.551935 +0.1
+	ID1.y =0.01655 +0.1
+	ID1.z =-0.1904 -0.1
 	
-	ID10.x =1.1789
-	ID10.y =0.198291
-	ID10.z =-0.39814
+	ID10.x =0.685443
+	ID10.y =0
+	ID10.z =0
+	
+	ID20.x =1.10445
+	ID20.y =-0.42439
+	ID20.z =0
+	
+	ID30.x =0.327208
+	ID30.y =-0.42949
+	ID30.z =0
 
 	while(not rospy.is_shutdown()):
 		a = 1
