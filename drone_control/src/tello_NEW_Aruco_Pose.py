@@ -84,9 +84,7 @@ def AruCoPose(newArPose):
 		count+=1
 	
 	elif(count ==5):
-		#average.pose.position.x = average.pose.position.x/5
-		#average.pose.position.y = average.pose.position.y/5
-		#average.pose.position.z = average.pose.position.z/5	
+
 		TelloPose.position.x = average.pose.position.x/5
 		TelloPose.position.y = average.pose.position.y/5
 		TelloPose.position.z = average.pose.position.z/5
@@ -124,24 +122,24 @@ def main():
 	count = 0
 	sensitivity = 0.3
 	
-	#ID1.x =0.529883 - 0.1
-	#ID1.y =0.006598 + 0.2
-	#ID1.z =-0.16592 - 0.2
+	#ID1.x =0.2741187 +0.1
+	#ID1.y =0.932959 +0.1
+	#ID1.z =-0.2280 -0.2
 	
-	ID1.x =0.551935 +0.1
-	ID1.y =0.01655 +0.1
-	ID1.z =-0.1904 -0.1
+	ID1.x =0.55833 +0.1
+	ID1.y =0.01659 +0.1
+	ID1.z =-0.1515 -0.2
 	
 	ID10.x =0.685443
-	ID10.y =0
+	ID10.y =0 +0.1
 	ID10.z =0
 	
 	ID20.x =1.10445
-	ID20.y =-0.42439
+	ID20.y =-0.42439 +0.1
 	ID20.z =0
 	
-	ID30.x =0.327208
-	ID30.y =-0.42949
+	ID30.x =0.327208 -0.1
+	ID30.y =-0.42949 +0.1
 	ID30.z =0
 
 	while(not rospy.is_shutdown()):
