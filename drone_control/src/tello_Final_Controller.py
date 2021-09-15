@@ -92,13 +92,17 @@ def hologramTrack():
 			goalPose.position.z = 0
 			print ('Goal z outside bounding box')
 			
-		drone_vel.linear.x = -(speed)*goalPose.position.x
-		drone_vel.linear.y = -(speed)*goalPose.position.z
-		drone_vel.linear.z = (speed+0.5)*goalPose.position.y
+		#integral_x.append(goalPose.position.x)
+		integral_y.append(goalPose.position.y)
+		#integral_z.append(goalPose.position.z)
+		
+		drone_vel.linear.x = -(speed)*goalPose.position.x #+ 0.01*(sum(integral_x))
+		drone_vel.linear.y = -(speed)*goalPose.position.z #+ 0.02*(sum(integral_z))
+		drone_vel.linear.z = (speed+0.5)*goalPose.position.y + 0.03*(sum(integral_y))
 		pub_vel.publish(drone_vel)
 		print('\nX Vel: ',drone_vel.linear.x, 'Y Vel: ',drone_vel.linear.y, 'Z Vel: ',drone_vel.linear.z)
 		#time.sleep(0.5)
-		time.sleep(1.1)
+		time.sleep(1)
 		pub_vel.publish(zero_vel)
 			
 	pub_vel.publish(zero_vel)
@@ -111,7 +115,8 @@ def main():
 
 	rospy.init_node('Tello_Server')
 
-	global hologram, tello, goalPose, Marker, takeOff, pub_vel, drone_vel, zero_vel, msg, telloStatus, ID1, ID10, realMarker, pub_tellopose, speed, flag
+	global hologram, tello, goalPose, Marker, takeOff, pub_vel, drone_vel, zero_vel, msg, telloStatus, ID1, ID10, realMarker, pub_tellopose, speed, flag, integral_x, integral_y, integral_z
+	
 	hologram = Pose()
 	tello = Pose()
 	goalPose = Pose()
@@ -121,6 +126,11 @@ def main():
 	zero_vel = Twist()
 	telloStatus = TelloStatus()
 	realMarker = Marker()
+	
+	integral_x = []
+	integral_y = []
+	integral_z = []
+	
 	msg = ''
 	speed =1
 	flag = 1
