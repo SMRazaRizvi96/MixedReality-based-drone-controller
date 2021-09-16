@@ -84,7 +84,7 @@ def telloStat(newStatus):
 
 def hologramTrack():
 	
-	global tello, hologram, pub_vel, drone_vel, goalPose, msg, flag, i, counter, waitNext
+	global tello, hologram, pub_vel, drone_vel, goalPose, msg, flag, i, counter, waitNext, y_integral_sum
 
 
 	if(not rospy.is_shutdown() and 'stop' not in msg):
@@ -93,18 +93,27 @@ def hologramTrack():
 		goalPose.position.y = hologram.position.y - tello.position.y
 		goalPose.position.z = hologram.position.z - tello.position.z
 		#print("\nGoal x: ", goalPose.position.x, " Goal y: ", goalPose.position.y, " Goal z: ", goalPose.position.z)
+		
+		y_integral_sum = y_integral_sum + goalPose.position.y
 
 		
 		if((not waitNext) and holo_counter_x[len(holo_counter_x)-2] == holo_counter_x[len(holo_counter_x)-1] and ((abs(goalPose.position.x) > 0.15) or (abs(goalPose.position.y) > 0.15) or (abs(goalPose.position.z) > 0.15))):
 			counter = timer()
 			i+=1
 			
-			print("Goal ",i,  " Given: ", "\nx: ", goalPose.position.x, "y: ", goalPose.position.y, "z: ", goalPose.position.z, "\n")
+			st = "Goal ",i,  " Given: ", " x: ", goalPose.position.x, "y: ", goalPose.position.y, "z: ", goalPose.position.z
+			print(st , "\n")
+			dataFile.write(str(st) + '\n')
+			
 			waitNext = 1
 			
-		if(waitNext and (abs(goalPose.position.x) < 0.15) and (abs(goalPose.position.y) < 0.15) and (abs(goalPose.position.z) < 0.15)):
+		if(waitNext and (abs(goalPose.position.x) <= 0.10) and (abs(goalPose.position.y) <= 0.10) and (abs(goalPose.position.z) <= 0.10)):
 			timeElapsed = timer() - counter
-			print ("Time taken to reach the Goal: ", timedelta(seconds=timeElapsed), "\n")
+			
+			st = "Time taken to reach the Goal: ", timedelta(seconds=timeElapsed)
+			print (st, "\n")
+			dataFile.write(str(st) + '\n')
+			
 			holo_counter_x.clear()
 			holo_counter_y.clear()
 			holo_counter_z.clear()
@@ -125,12 +134,12 @@ def hologramTrack():
 			print ('Goal z outside bounding box')
 			
 		#integral_x.append(goalPose.position.x)
-		integral_y.append(goalPose.position.y)
+		#integral_y.append(goalPose.position.y)
 		#integral_z.append(goalPose.position.z)
 		
 		drone_vel.linear.x = -(speed)*goalPose.position.x #+ 0.01*(sum(integral_x))
 		drone_vel.linear.y = -(speed)*goalPose.position.z #+ 0.02*(sum(integral_z))
-		drone_vel.linear.z = (speed+0.5)*goalPose.position.y + 0.03*(sum(integral_y))
+		drone_vel.linear.z = (speed+0.5)*goalPose.position.y + 0.03*(y_integral_sum)
 		pub_vel.publish(drone_vel)
 		#print('\nX Vel: ',drone_vel.linear.x, 'Y Vel: ',drone_vel.linear.y, 'Z Vel: ',drone_vel.linear.z)
 		#time.sleep(0.5)
@@ -147,7 +156,11 @@ def main():
 
 	rospy.init_node('Tello_Server')
 
-	global hologram, tello, goalPose, Marker, takeOff, pub_vel, drone_vel, zero_vel, msg, telloStatus, ID1, ID10, realMarker, pub_tellopose, speed, flag, integral_x, integral_y, integral_z, holo_counter_x, holo_counter_y, holo_counter_z, i, holoCount, counter, waitNext
+	global hologram, tello, goalPose, Marker, takeOff, pub_vel, drone_vel, zero_vel, msg, telloStatus, ID1, ID10, realMarker, pub_tellopose, speed, flag, integral_x, integral_y, integral_z, holo_counter_x, holo_counter_y, holo_counter_z, i, holoCount, counter, waitNext, dataFile, y_integral_sum
+	
+	dataFile = open('datafile.txt','a')
+	dataFile.write('\n')
+	dataFile.write('New Data ---------------------------------------------------------\n')
 	
 	hologram = Pose()
 	tello = Pose()
@@ -159,9 +172,9 @@ def main():
 	telloStatus = TelloStatus()
 	realMarker = Marker()
 	
-	integral_x = []
-	integral_y = []
-	integral_z = []
+	#integral_x = []
+	#integral_y = []
+	#integral_z = []
 	
 	holo_counter_x = []
 	holo_counter_y = []
@@ -175,6 +188,7 @@ def main():
 	flag = 1
 	i = 0
 	counter = 0
+	y_integral_sum = 0
 
 	
 	# Subscribed Topics
