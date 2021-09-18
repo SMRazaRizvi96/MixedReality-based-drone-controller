@@ -110,6 +110,9 @@ def hologramTrack():
 		if(waitNext and (abs(goalPose.position.x) <= 0.10) and (abs(goalPose.position.y) <= 0.10) and (abs(goalPose.position.z) <= 0.10)):
 			timeElapsed = timer() - counter
 			
+			st = "Tello Pose: ", "x: ", tello.position.x, " y: ", tello.position.y, " z: ", tello.position.z
+			print (st, "\n")
+			dataFile.write(str(st) + '\n')
 			st = "Time taken to reach the Goal: ", timedelta(seconds=timeElapsed)
 			print (st, "\n")
 			dataFile.write(str(st) + '\n')
@@ -121,15 +124,18 @@ def hologramTrack():
 			
 			
 		# For the bounding box
-		if(not (0.2 < hologram.position.x < 2)):
+		#if(not (0.2 < hologram.position.x < 2)):
+		if(not (0.4 < hologram.position.x < 1.6)):
 			goalPose.position.x = 0
 			print ('Goal x outside bounding box')
 			
-		if(not (-0.6 < hologram.position.y < 0.3)):
+		#if(not (-0.6 < hologram.position.y < 0.3)):
+		if(not (-0.4 < hologram.position.y < 0.6)):
 			goalPose.position.y = 0
 			print ('Goal y outside bounding box')
 			
-		if(not (0.3 < hologram.position.z < 1.3)):
+		#if(not (0.3 < hologram.position.z < 1.3)):
+		if(not (0.8 < hologram.position.z < 2.0)):
 			goalPose.position.z = 0
 			print ('Goal z outside bounding box')
 			

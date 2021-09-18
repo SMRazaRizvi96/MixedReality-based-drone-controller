@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<launch>
+
+	<include file="$(find ros_tcp_endpoint)/launch/endpoint.launch"/>
+	<include file="$(find aruco_ros)/launch/single.launch" />
+	<include file="$(find drone_control)/launch/custom_tello_node.launch" />
+	
+</launch>

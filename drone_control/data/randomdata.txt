@@ -1,0 +1,85 @@
+
+New Data ---------------------------------------------------------
+('Goal ', 1, ' Given: ', ' x: ', 0.5326219195556641, 'y: ', -0.3128021472182274, 'z: ', 0.32247539424896243)
+('Time taken to reach the Goal: ', datetime.timedelta(seconds=7, microseconds=869489))
+('Goal ', 2, ' Given: ', ' x: ', -0.154594707079315, 'y: ', -0.021669211638450647, 'z: ', -0.05809156036376928)
+('Time taken to reach the Goal: ', datetime.timedelta(seconds=6, microseconds=470650))
+
+New Data ---------------------------------------------------------
+('Goal ', 1, ' Given: ', ' x: ', 0.4286458784770966, 'y: ', -0.27744651819133764, 'z: ', 0.06189585590362556)
+('Time taken to reach the Goal: ', datetime.timedelta(seconds=8, microseconds=89436))
+('Goal ', 2, ' Given: ', ' x: ', 0.2396873115177155, 'y: ', 0.10503497634506215, 'z: ', 0.06461435222625744)
+('Time taken to reach the Goal: ', datetime.timedelta(seconds=5, microseconds=95156))
+('Goal ', 3, ' Given: ', ' x: ', -0.18078069762096405, 'y: ', 0.08639334832763668, 'z: ', 0.10261286163330086)
+('Time taken to reach the Goal: ', datetime.timedelta(seconds=1, microseconds=64998))
+('Goal ', 4, ' Given: ', ' x: ', -0.2118196949939728, 'y: ', 0.05341554132270067, 'z: ', 0.017453106880188196)
+('Time taken to reach the Goal: ', datetime.timedelta(seconds=2, microseconds=277534))
+('Goal ', 5, ' Given: ', ' x: ', -0.05800085690860746, 'y: ', 0.10344997537577147, 'z: ', 0.22183445358276388)
+('Time taken to reach the Goal: ', datetime.timedelta(seconds=28, microseconds=292070))
+('Goal ', 6, ' Given: ', ' x: ', 0.045222845541954104, 'y: ', -0.3774344527306558, 'z: ', 0.13470302486419694)
+
+New Data ---------------------------------------------------------
+('Goal ', 1, ' Given: ', ' x: ', 0.6613807255458832, 'y: ', -0.5627480068292618, 'z: ', 0.5201181735992433)
+('Time taken to reach the Goal: ', datetime.timedelta(seconds=7, microseconds=589078))
+('Goal ', 2, ' Given: ', ' x: ', 0.0646714343304634, 'y: ', -0.18978732313537608, 'z: ', -0.0252205762863158)
+('Time taken to reach the Goal: ', datetime.timedelta(seconds=1, microseconds=3745))
+('Goal ', 3, ' Given: ', ' x: ', 0.04216958122205727, 'y: ', 0.10153909240341175, 'z: ', 0.1540029850006106)
+('Time taken to reach the Goal: ', datetime.timedelta(seconds=16, microseconds=674868))
+('Goal ', 4, ' Given: ', ' x: ', -0.013065247804927793, 'y: ', 0.07667856008148188, 'z: ', -0.17143737411498972)
+('Time taken to reach the Goal: ', datetime.timedelta(seconds=2, microseconds=315715))
+('Goal ', 5, ' Given: ', ' x: ', -0.04429178443651194, 'y: ', 0.01325437218284603, 'z: ', 0.24836047554016139)
+('Time taken to reach the Goal: ', datetime.timedelta(seconds=7, microseconds=848608))
+('Goal ', 6, ' Given: ', ' x: ', -0.3839747191791534, 'y: ', 0.06376851711845388, 'z: ', -0.07149697875976546)
+('Time taken to reach the Goal: ', datetime.timedelta(seconds=12, microseconds=809310))
+('Goal ', 7, ' Given: ', ' x: ', -0.045247163958930914, 'y: ', 0.3632706995780467, 'z: ', -0.06468605136871308)
+('Time taken to reach the Goal: ', datetime.timedelta(seconds=3, microseconds=378183))
+('Goal ', 8, ' Given: ', ' x: ', 0.15697657112593666, 'y: ', -0.4412519189434052, 'z: ', 0.01969409847259551)
+('Time taken to reach the Goal: ', datetime.timedelta(seconds=8, microseconds=517370))
+('Goal ', 9, ' Given: ', ' x: ', -0.1110468383237837, 'y: ', -0.1992458966493607, 'z: ', 0.02054561042785652)
+('Time taken to reach the Goal: ', datetime.timedelta(seconds=3, microseconds=965044))
+('Goal ', 10, ' Given: ', ' x: ', 0.0998266058794024, 'y: ', -0.18658316952538498, 'z: ', -0.11892377471923798)
+('Time taken to reach the Goal: ', datetime.timedelta(seconds=16, microseconds=187963))
+('Goal ', 11, ' Given: ', ' x: ', 0.06226488338661196, 'y: ', -0.04382684316062935, 'z: ', 0.15212214851379402)
+('Time taken to reach the Goal: ', datetime.timedelta(seconds=1, microseconds=147591))
+('Goal ', 12, ' Given: ', ' x: ', 0.027864813237381103, 'y: ', 0.1583592334423065, 'z: ', -0.007356039047240914)
+('Time taken to reach the Goal: ', datetime.timedelta(seconds=1, microseconds=924036))
+('Goal ', 13, ' Given: ', ' x: ', -0.09696133513278937, 'y: ', -0.14644224019432073, 'z: ', -0.47019561862945514)
+('Time taken to reach the Goal: ', datetime.timedelta(seconds=27, microseconds=74342))
+('Goal ', 14, ' Given: ', ' x: ', -0.06589006307601908, 'y: ', 0.113592969423294, 'z: ', -0.18723284339904778)
+('Time taken to reach the Goal: ', datetime.timedelta(seconds=16, microseconds=46539))
+('Goal ', 15, ' Given: ', ' x: ', -0.11416950537014015, 'y: ', 0.3448805226800441, 'z: ', 0.022141989707946896)
+('Time taken to reach the Goal: ', datetime.timedelta(seconds=36, microseconds=469415))
+
+New Data ---------------------------------------------------------
+('Goal ', 1, ' Given: ', ' x: ', 0.6266971224975586, 'y: ', 0.00968606611227986, 'z: ', 0.1789851036071779)
+('Time taken to reach the Goal: ', datetime.timedelta(seconds=15, microseconds=395406))
+('Goal ', 2, ' Given: ', ' x: ', -0.20417448444414144, 'y: ', 0.026176966991782104, 'z: ', 0.08855594062805183)
+('Time taken to reach the Goal: ', datetime.timedelta(seconds=4, microseconds=61718))
+('Goal ', 3, ' Given: ', ' x: ', 0.27806354326810845, 'y: ', 0.1157528309270143, 'z: ', 0.052156003952026575)
+('Time taken to reach the Goal: ', datetime.timedelta(seconds=1, microseconds=998167))
+('Goal ', 4, ' Given: ', ' x: ', 0.016543430332470077, 'y: ', 0.21254711136746401, 'z: ', -0.032325187683105217)
+('Time taken to reach the Goal: ', datetime.timedelta(seconds=4, microseconds=11983))
+('Goal ', 5, ' Given: ', ' x: ', -0.036195525399780326, 'y: ', 0.1047663232430219, 'z: ', 0.18327861690521252)
+('Time taken to reach the Goal: ', datetime.timedelta(seconds=1, microseconds=82047))
+
+New Data ---------------------------------------------------------
+('Goal ', 1, ' Given: ', ' x: ', 0.6389266843032837, 'y: ', -0.31670508021974564, 'z: ', 0.7930982675552368)
+('Time taken to reach the Goal: ', datetime.timedelta(seconds=17, microseconds=723986))
+('Goal ', 2, ' Given: ', ' x: ', -0.36911166867275247, 'y: ', -0.1195627516226769, 'z: ', -0.24954120254516576)
+('Time taken to reach the Goal: ', datetime.timedelta(seconds=5, microseconds=721362))
+
+New Data ---------------------------------------------------------
+('Goal ', 1, ' Given: ', ' x: ', 0.5454245744819641, 'y: ', 0.1254462770042417, 'z: ', -0.24071158504486068)
+('Time taken to reach the Goal: ', datetime.timedelta(seconds=13, microseconds=867097))
+('Goal ', 2, ' Given: ', ' x: ', 0.08737894879531871, 'y: ', -0.01053429331207284, 'z: ', -0.15003010368347147)
+('Time taken to reach the Goal: ', datetime.timedelta(seconds=7, microseconds=711849))
+('Goal ', 3, ' Given: ', ' x: ', 0.10065340386581423, 'y: ', -0.014091033596038915, 'z: ', -0.16747278308868396)
+('Time taken to reach the Goal: ', datetime.timedelta(seconds=10, microseconds=265905))
+
+New Data ---------------------------------------------------------
+('Goal ', 1, ' Given: ', ' x: ', 0.07658562604904179, 'y: ', -0.474277962097168, 'z: ', 0.8276954498291016)
+('Time taken to reach the Goal: ', datetime.timedelta(seconds=147, microseconds=995650))
+('Goal ', 2, ' Given: ', ' x: ', -0.08651766194152821, 'y: ', 0.1621749526677131, 'z: ', -0.11426059341430639)
+('Time taken to reach the Goal: ', datetime.timedelta(seconds=2, microseconds=771459))
+
+New Data ---------------------------------------------------------
