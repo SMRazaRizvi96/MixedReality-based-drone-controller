@@ -92,10 +92,10 @@ def AruCoPose(newArPose):
 		average = Marker()
 		count = 0
 				
-		print('Tello ID: ', realMarker.id,'\n')
-		print('Tello Position x: ', realMarker.pose.position.x,'\n')
-		print('Tello Code Position y: ', realMarker.pose.position.y,'\n')
-		print('Tello Position z: ', realMarker.pose.position.z,'\n')
+		#print('Tello ID: ', realMarker.id,'\n')
+		#print('Tello Position x: ', realMarker.pose.position.x,'\n')
+		#print('Tello Code Position y: ', realMarker.pose.position.y,'\n')
+		#print('Tello Position z: ', realMarker.pose.position.z,'\n')
 		
 	lastPose.position.x= realMarker.pose.position.x
 	lastPose.position.y= realMarker.pose.position.y
@@ -126,8 +126,8 @@ def main():
 	#ID1.y =0.932959 +0.1
 	#ID1.z =-0.2280 -0.2
 	
-	ID1.x =0.55833 +0.1
-	ID1.y =0.004959 +0.1+0.2
+	ID1.x =0.51133 +0.1
+	ID1.y =0.009959 +0.1+0.2
 	ID1.z =-0.1715 -0.2
 	
 	ID10.x =0.685443

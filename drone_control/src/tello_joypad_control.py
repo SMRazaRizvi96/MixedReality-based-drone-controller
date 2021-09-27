@@ -41,43 +41,47 @@ from tello_driver.msg import TelloStatus
 
 def telloPos(currenttelloPos):
 	global tello, flag
+  		
 	tello.position.x = currenttelloPos.position.x
 	tello.position.y = currenttelloPos.position.y
 	tello.position.z = currenttelloPos.position.z
-  
+  	
+
     
 def joyStatus(joystat):
+
+	global counter
 	joystick = joystat
 	#print (abs(joystick.axes[0]))		
 		
 	# x vel
 
-	if(tello.position.x < 0.2):	
+	if(tello.position.x < 0.4):	
 		drone_vel.linear.x = -abs(joystick.axes[0])
 		
-	elif(tello.position.x > 2):
+	elif(tello.position.x > 1.45):
 		drone_vel.linear.x = abs(joystick.axes[0])
 		
 	else:
-		drone_vel.linear.x = joystick.axes[0]
+		drone_vel.linear.x = -joystick.axes[0]
 		
 		
 	# y vel
 
-	if(tello.position.z < 0.3):	
+	if(tello.position.z < 0.8):	
 		drone_vel.linear.y = -abs(joystick.axes[1])
 		
-	elif(tello.position.z > 1.3):
+	elif(tello.position.z > 2.0):
 		drone_vel.linear.y = abs(joystick.axes[1])
 		
 	else:
 		drone_vel.linear.y = joystick.axes[1]
 	
 	# z vel
-	if(tello.position.y < -0.6):
+	if(tello.position.y < -0.4):
 		drone_vel.linear.z = joystick.buttons[0]
 		
-	elif(tello.position.y > 0.3):
+	elif(tello.position.y > 0.6):
 		drone_vel.linear.z = joystick.buttons[2]
 		
 	else:
@@ -98,6 +102,17 @@ def joyStatus(joystat):
 		pub_land.publish(land)
 		print("Land")
 		
+	if(joystick.buttons[4]):
+		st = "Tello Pose: ", "x: ", tello.position.x, " y: ", tello.position.y, " z: ", tello.position.z
+		print (st, "\n")
+		joyFile.write(str(st) + '\n')
+		timeElapsed = timer() - counter
+		st = "Time taken to reach the Goal: ", timedelta(seconds=timeElapsed)
+		print (st, "\n")
+		joyFile.write(str(st) + '\n')
+		
+		counter = timer()
+		
 	
 def telloStat(newStatus):
     global telloStatus
@@ -116,7 +131,7 @@ def main():
 
 	rospy.init_node('tello_joypad_control')
 
-	global hologram, tello, goalPose, Marker, takeOff, pub_vel, drone_vel, zero_vel, msg, telloStatus, ID1, ID10, realMarker, pub_tellopose, speed, flag, integral_x, integral_y, integral_z, holo_counter_x, holo_counter_y, holo_counter_z, i, holoCount, counter, waitNext, dataFile, y_integral_sum, joystick, pub_land, pub_takeOff, land
+	global hologram, tello, goalPose, Marker, takeOff, pub_vel, drone_vel, zero_vel, msg, telloStatus, ID1, ID10, realMarker, pub_tellopose, speed, flag, integral_x, integral_y, integral_z, holo_counter_x, holo_counter_y, holo_counter_z, i, holoCount, counter, waitNext, dataFile, y_integral_sum, joystick, pub_land, pub_takeOff, land, joyFile
 		
 	hologram = Pose()
 	tello = Pose()
@@ -163,13 +178,19 @@ def main():
 	zero_vel.linear.x = 0
 	zero_vel.linear.y = 0
 	zero_vel.linear.z = 0
+	
+	joyFile = open('/home/raza/joyfile.txt','a')
+	joyFile.write('\n')
+	joyFile.write('New Data ---------------------------------------------------------\n')
 
 
 	while(not rospy.is_shutdown()):
 		#JoyTrack()
 		a=1
 	
+	joyFile.close()
 	return
+
 	
 	#rospy.spin()
 

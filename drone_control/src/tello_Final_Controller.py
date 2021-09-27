@@ -54,8 +54,8 @@ def hologramPos(currenthologramPos):
     
     #if(holoCount <=10):
     holo_counter_x.append(hologram.position.x)
-    holo_counter_y.append(hologram.position.y)
-    holo_counter_z.append(hologram.position.z)
+    #holo_counter_y.append(hologram.position.y)
+    #holo_counter_z.append(hologram.position.z)
     #print(len(holo_counter_x))
     #holoCount+=1
 	    
@@ -97,7 +97,7 @@ def hologramTrack():
 		y_integral_sum = y_integral_sum + goalPose.position.y
 
 		
-		if((not waitNext) and holo_counter_x[len(holo_counter_x)-2] == holo_counter_x[len(holo_counter_x)-1] and ((abs(goalPose.position.x) > 0.15) or (abs(goalPose.position.y) > 0.15) or (abs(goalPose.position.z) > 0.15))):
+		if((not waitNext) and holo_counter_x[len(holo_counter_x)-2] == holo_counter_x[len(holo_counter_x)-1] and ((abs(goalPose.position.x) > 0.1) or (abs(goalPose.position.y) > 0.1) or (abs(goalPose.position.z) > 0.1))):
 			counter = timer()
 			i+=1
 			
@@ -117,9 +117,9 @@ def hologramTrack():
 			print (st, "\n")
 			dataFile.write(str(st) + '\n')
 			
-			holo_counter_x.clear()
-			holo_counter_y.clear()
-			holo_counter_z.clear()
+			#holo_counter_x.clear()
+			#holo_counter_y.clear()
+			#holo_counter_z.clear()
 			waitNext = 0
 			
 			
