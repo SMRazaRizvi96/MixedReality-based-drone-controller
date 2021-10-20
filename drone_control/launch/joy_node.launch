@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<launch>
+
+		<param name="joy_node/dev"  value="/dev/input/js6" />
+		
+		<include file="$(find aruco_ros)/launch/single.launch" />
+		<include file="$(find drone_control)/launch/custom_tello_node.launch" />
+	
+		<node pkg="drone_control" name="tello_NEW_Aruco_Pose" type="tello_NEW_Aruco_Pose.py" output="screen">
+		</node>
+
+		<node pkg="joy" name="joy_node" type="joy_node" output="screen">	
+		</node>
+		
+		<node pkg="drone_control" name="tello_joypad_control" type="tello_joypad_control.py" output="screen" launch-prefix = "xterm -e">
+		</node>
+</launch>

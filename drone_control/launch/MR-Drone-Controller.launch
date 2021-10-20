@@ -5,4 +5,9 @@
 	<include file="$(find aruco_ros)/launch/single.launch" />
 	<include file="$(find drone_control)/launch/custom_tello_node.launch" />
 	
+	<node pkg="drone_control" name="tello_NEW_Aruco_Pose" type="tello_NEW_Aruco_Pose.py" output="screen">
+	</node>
+	
+	<node pkg="drone_control" name="tello_Final_Controller" type="tello_Final_Controller.py" output="screen" launch-prefix = "xterm -e">
+	</node>
 </launch>
