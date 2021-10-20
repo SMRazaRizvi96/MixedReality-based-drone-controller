@@ -33,9 +33,6 @@ from std_msgs.msg import String
 from std_msgs.msg import Float64
 from sensor_msgs.msg import Joy
 from nav_msgs.msg import Odometry
-from drone_control.msg import TargetPose
-from drone_control.msg import QRPose
-from drone_control.msg import StatusColor
 from visualization_msgs.msg import Marker
 from tello_driver.msg import TelloStatus
 

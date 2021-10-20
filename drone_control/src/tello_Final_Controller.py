@@ -52,18 +52,8 @@ def hologramPos(currenthologramPos):
     hologram.position.y = currenthologramPos.pos_y
     hologram.position.z = currenthologramPos.pos_z
     
-    #if(holoCount <=10):
     holo_counter_x.append(hologram.position.x)
-    #holo_counter_y.append(hologram.position.y)
-    #holo_counter_z.append(hologram.position.z)
-    #print(len(holo_counter_x))
-    #holoCount+=1
-	    
-   # elif(holoCount):
-	#    holo_counter_x.clear()
-	 #   holo_counter_y.clear()
-	  #  holo_counter_z.clear()
-	   # holoCount = 0
+
 
 def telloPos(currenttelloPos):
 	global tello, flag
@@ -101,11 +91,12 @@ def hologramTrack():
 			counter = timer()
 			i+=1
 			
-			st = "Goal ",i,  " Given: ", " x: ", goalPose.position.x, "y: ", goalPose.position.y, "z: ", goalPose.position.z
+			st = "Goal ",i,  " Given: ", " x: ", hologram.position.x, "y: ", hologram.position.y, "z: ", hologram.position.z
 			print(st , "\n")
 			dataFile.write(str(st) + '\n')
 			
 			waitNext = 1
+			
 			
 		if(waitNext and (abs(goalPose.position.x) <= 0.10) and (abs(goalPose.position.y) <= 0.10) and (abs(goalPose.position.z) <= 0.10)):
 			timeElapsed = timer() - counter
@@ -138,17 +129,12 @@ def hologramTrack():
 		if(not (0.8 < hologram.position.z < 2.0)):
 			goalPose.position.z = 0
 			print ('Goal z outside bounding box')
-			
-		#integral_x.append(goalPose.position.x)
-		#integral_y.append(goalPose.position.y)
-		#integral_z.append(goalPose.position.z)
 		
 		drone_vel.linear.x = -(speed)*goalPose.position.x #+ 0.01*(sum(integral_x))
 		drone_vel.linear.y = -(speed)*goalPose.position.z #+ 0.02*(sum(integral_z))
 		drone_vel.linear.z = (speed+0.5)*goalPose.position.y + 0.03*(y_integral_sum)
 		pub_vel.publish(drone_vel)
-		#print('\nX Vel: ',drone_vel.linear.x, 'Y Vel: ',drone_vel.linear.y, 'Z Vel: ',drone_vel.linear.z)
-		#time.sleep(0.5)
+
 		time.sleep(1)
 		pub_vel.publish(zero_vel)
 			
@@ -162,7 +148,7 @@ def main():
 
 	rospy.init_node('Tello_Server')
 
-	global hologram, tello, goalPose, Marker, takeOff, pub_vel, drone_vel, zero_vel, msg, telloStatus, ID1, ID10, realMarker, pub_tellopose, speed, flag, integral_x, integral_y, integral_z, holo_counter_x, holo_counter_y, holo_counter_z, i, holoCount, counter, waitNext, dataFile, y_integral_sum
+	global hologram, tello, goalPose, Marker, takeOff, pub_vel, drone_vel, zero_vel, msg, telloStatus, ID1, ID10, realMarker, pub_tellopose, speed, flag, integral_x, integral_y, integral_z, holo_counter_x, holo_counter_y, holo_counter_z, i, holoCount, counter, waitNext, dataFile, y_integral_sum, saveTello
 	
 	dataFile = open('datafile.txt','a')
 	dataFile.write('\n')
@@ -170,6 +156,7 @@ def main():
 	
 	hologram = Pose()
 	tello = Pose()
+	saveTello = Pose()
 	goalPose = Pose()
 	takeOff = Empty()
 	land = Empty()
@@ -178,9 +165,6 @@ def main():
 	telloStatus = TelloStatus()
 	realMarker = Marker()
 	
-	#integral_x = []
-	#integral_y = []
-	#integral_z = []
 	
 	holo_counter_x = []
 	holo_counter_y = []
@@ -207,7 +191,7 @@ def main():
 	pub_takeOff = rospy.Publisher("/tello/takeoff", Empty, queue_size=10)
 	pub_vel = rospy.Publisher("/tello/cmd_vel", Twist, queue_size=10)
 	pub_land = rospy.Publisher("/tello/land", Empty, queue_size=10)
-	pub_tellopose = rospy.Publisher("/tello/ArucoPose", Pose,queue_size=10)
+	#pub_tellopose = rospy.Publisher("/tello/ArucoPose", Pose,queue_size=10)
 	
 	zero_vel.linear.x = 0
 	zero_vel.linear.y = 0

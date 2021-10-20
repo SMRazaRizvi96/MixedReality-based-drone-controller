@@ -92,10 +92,6 @@ def AruCoPose(newArPose):
 		average = Marker()
 		count = 0
 				
-		#print('Tello ID: ', realMarker.id,'\n')
-		#print('Tello Position x: ', realMarker.pose.position.x,'\n')
-		#print('Tello Code Position y: ', realMarker.pose.position.y,'\n')
-		#print('Tello Position z: ', realMarker.pose.position.z,'\n')
 		
 	lastPose.position.x= realMarker.pose.position.x
 	lastPose.position.y= realMarker.pose.position.y
@@ -144,9 +140,6 @@ def main():
 
 	while(not rospy.is_shutdown()):
 		a = 1
-		#if(realMarker):
-		#	TelloPose.position = realMarker.pose.position
-		#	pub_tellopose.publish(TelloPose)
 		
 	rospy.spin()
 
