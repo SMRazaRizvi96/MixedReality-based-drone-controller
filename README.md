@@ -110,7 +110,7 @@ Note down the IP Address of the Ubuntu assigned by the local network that will N
 
 #### Using the Mixed Reality Controller
 
-• Place 4 ArUco markers on a flat wall, as shown in the image below.
+• Place 4 ArUco markers on a flat wall, in the order as shown in the image below.
 
 ![alt text](https://github.com/SMRazaRizvi96/MixedReality-based-drone-controller/blob/master/aruco_markers_detected.png)
 
