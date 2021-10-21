@@ -62,7 +62,7 @@ This will allow a communication between Unity and ROS.
 
 • Clone the [ArUco ROS](https://github.com/pal-robotics/aruco_ros) package inside the src folder of your ROS Workspace
 
-• Clone the project’s repository inside the src folder of your ROS Workspace, and delete the MR-Controller-Hololens folder
+• Clone the project’s repository inside the src folder of your ROS Workspace, and delete the MR-Based-Drone-Controller folder
 
 • Build the ROS Workspace using the ’catkin_make’ command
 
@@ -90,7 +90,7 @@ Note down the IP Address of the Ubuntu assigned by the local network that will N
 
 • Clone the GitHub repository inside Windows
 
-• Open the Unity project from the MR-Controller-Hololens folder
+• Open the Unity project from the MR-Based-Drone-Controller folder
 
 • Write the ROS IP Address inside the Robotics tab of the Unity project. This IP Address is same as the one mentioned in the ROS TCP Endpoint params file
 
