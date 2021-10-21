@@ -126,3 +126,6 @@ ArUco marker identity 1 from the Hololens reference frame.
 • Now Grab and place the hologram through the Hololens, to give goal positions to the Tello drone
 
 • Type ’land’ to land the drone
+
+![alt text](https://github.com/SMRazaRizvi96/MixedReality-based-drone-controller/blob/master/using_hololens.JPG)
+
