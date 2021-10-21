@@ -14,9 +14,13 @@ The drone pilot will be wearing a Hololens2 that will augment the pilot's vision
 
 ## Software Specifications
 *Ubuntu 20.04 running inside a Virtual Box*
+
 *ROS Melodic installed in Ubuntu 20.04*
+
 *Unity Hub 2.4.3*
+
 *Unity 2020.3.13f1*
+
 *Visual Studio 2019*
 
 ## Software Architecture
