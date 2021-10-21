@@ -31,6 +31,7 @@ smrazarizvi96@gmail.com
 #### Setting up the Drone Controller inside ROS
 
 • Download and Install the Virtual Box in Windows
+
 • Download the Ubuntu 20.04 ISO file, and install it’s Virtual Machine on the Virtual
 Box
 • Bridge the Wireless and Ethernet adapters inside the Virtual Machine form the network
