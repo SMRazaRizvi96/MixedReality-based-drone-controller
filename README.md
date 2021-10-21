@@ -112,6 +112,9 @@ Note down the IP Address of the Ubuntu assigned by the local network that will N
 
 • Place 4 ArUco markers on a flat wall, as shown in the image below.
 
+![alt text](https://github.com/SMRazaRizvi96/MixedReality-based-drone-controller/blob/master/aruco_markers_detected.png)
+
+
 • Stand in line with the wall, such that once the developed Mixed-Reality application runs on the Hololens, the Hololens reference frame is in line with the ArUco markers wall.
 
 • Measure the calibration constants such as the transformation constants x, y, z, between the ArUco markers from the ArUco marker with Identity 1, and the distance of the
