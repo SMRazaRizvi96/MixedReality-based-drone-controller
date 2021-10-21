@@ -136,3 +136,12 @@ ArUco marker identity 1 from the Hololens reference frame.
 
 ![alt text](https://github.com/SMRazaRizvi96/MixedReality-based-drone-controller/blob/master/using_hololens.JPG)
 
+![alt text](https://github.com/SMRazaRizvi96/MixedReality-based-drone-controller/blob/master/hologram-refframe.PNG)
+
+![alt text](https://github.com/SMRazaRizvi96/MixedReality-based-drone-controller/blob/master/daulet_holoview.PNG)
+
+![alt text](https://github.com/SMRazaRizvi96/MixedReality-based-drone-controller/blob/master/drone_notaligned.PNG)
+
+
+
+
