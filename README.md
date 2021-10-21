@@ -32,27 +32,42 @@ smrazarizvi96@gmail.com
 
 • Download and Install the Virtual Box in Windows
 
-• Download the Ubuntu 20.04 ISO file, and install it’s Virtual Machine on the Virtual
-Box
-• Bridge the Wireless and Ethernet adapters inside the Virtual Machine form the network
-settings of the Virtual Machine
+• Download the Ubuntu 20.04 ISO file, and install it’s Virtual Machine on the Virtual Box
+
+• Bridge the Wireless and Ethernet adapters inside the Virtual Machine form the network settings of the Virtual Machine
+
 • Turn on the Tello drone and face it towards the ArUco markers wall
+
 • Connect the WiFi to Tello’s WiFi, and Ethernet with a local network
+
 • Install ROS Melodic inside Ubuntu 20.04
+
 • Create a ROS Workspace
+
 • Clone the [ROS-TCP-Endpoint](https://github.com/Unity-Technologies/ROS-TCP-Endpoint) into the src folder of your ROS workspace.  
 This will allow a communication between Unity and ROS.
+
 • From [ROS-Unity Integration](https://github.com/Unity-Technologies/Unity-Robotics-Hub/blob/main/tutorials/ros_unity_integration/README.md) clone the **unity_robotics_demo** and **unity_robotics_demo_msgs** packages into the src folder of your ROS workspace insude Ubuntu.
+
 • Clone the [Tello Drover](https://github.com/appie-17/tello_driver) ROS package inside the src folder of your ROS Workspace
+
 • Clone the [ArUco ROS](https://github.com/pal-robotics/aruco_ros) package inside the src folder of your ROS Workspace
+
 • Clone the project’s repository inside the src folder of your ROS Workspace, and delete the MR-Controller-Hololens folder
+
 • Build the ROS Workspace using the ’catkin_make’ command
+
 • Find the hostname of the Ubuntu by typing *’hostname -I’* inside the terminal
+
 • The above command will give two IP addresses because of the two network connections.
 Note down the IP Address of the Ubuntu assigned by the local network that will NOT start with 192.xxx.xx.x
+
 • Mention this IP Address inside the config -> params file of the ROS TCP Endpoint package
+
 • Launch the endpoint.launch file of the ROS TCP Endpoint package to launch the ROS TCP Server on the mentioned IP Address
+
 • In order to launch the Joypad controller node, launch the joy_node.launch launch file of the drone_control package of this project
+
 • In order to launch the Mixed-Reality based drone controller, launch the MR-Drone-Controller.launch launch file of the drone_control package of this project
 
 #### Step 1:
