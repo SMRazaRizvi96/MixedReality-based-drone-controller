@@ -57,6 +57,8 @@ This will allow a communication between Unity and ROS.
 
 • Build the ROS Workspace using the ’catkin_make’ command
 
+• Give running permissions to all the .py files inside the drone_control package
+
 • Find the hostname of the Ubuntu by typing *’hostname -I’* inside the terminal
 
 • The above command will give two IP addresses because of the two network connections.
@@ -70,154 +72,48 @@ Note down the IP Address of the Ubuntu assigned by the local network that will N
 
 • In order to launch the Mixed-Reality based drone controller, launch the MR-Drone-Controller.launch launch file of the drone_control package of this project
 
-#### Step 1:
-Clone the **drone_control** package from this repository into the src folder of your ROS workspace insude Ubuntu.
-Clone the **MR-ControllerHololens** Unity project from this repository into your windows.
 
-#### Step 2:
-Clone the [ROS-TCP-Endpoint](https://github.com/Unity-Technologies/ROS-TCP-Endpoint) into the src folder of your ROS workspace.  
-This will allow a communication between Unity and ROS.
+#### Setting up the Mixed Reality Application - Hololens 2
 
-#### Step 3:
-From [ROS-Unity Integration](https://github.com/Unity-Technologies/Unity-Robotics-Hub/blob/main/tutorials/ros_unity_integration/README.md) clone the **unity_robotics_demo** and **unity_robotics_demo_msgs** packages into the src folder of your ROS workspace insude Ubuntu.  
-Supporting packages for the Unity-ROS Communication.
+• Download and Install the Unity Hub on Windows
 
-#### Step 4:
-Clone the [sjtu-drone](https://github.com/tahsinkose/sjtu-drone) package into the src folder of your ROS workspace.
+• Download and Install Unity version 2020.3.12f1
 
-#### Step 5:
+• Clone the GitHub repository inside Windows
 
-Go to your ROS Workspace through the Terminal and run the following commands:
+• Open the Unity project from the MR-Controller-Hololens folder
 
-    catkin_make
-    source devel/setup.bash
-    
-#### Step 6:
-Give running permissions to all the .py files inside the drone_control package
+• Write the ROS IP Address inside the Robotics tab of the Unity project. This IP Address is same as the one mentioned in the ROS TCP Endpoint params file
 
+• Build the UWP application from Unity and open the solution in Visual Studio
 
-## First Controller | Simulation: Command the simulated sjtu-drone to go to one goal point
+• Set the Solution Configuration parameter to ’Release’, and the Solution Platforms to ’ARM6’
 
-This controller will allow you to give one coordinate location to the drone, and the drone will reach and stay at the goal coordinate autonomously.
+• Turn on the Hololens 2 and connect it to the local internet connection through the local network’s WiFi
 
-#### Launch the sjtu-drone
+• Find the IP Address assigned to the Hololens, and mention it inside the Machine Name parameter of the debugging properties, inside the visual studio solution
 
-        roslaunch sjtu_drone simple.launch
-        
-#### Run the controller
+• Ask the drone pilot to wear the Hololens and stand at the starting calibration position
 
-        rosrun drone_control user_control.py
-        
-   Now give the x, y, z coordinates as the goal coordinate for the drone.
-        
-        
-        
-## Second Controller | Simulation: Control the Simulated Drone from Unity
+• Now upload the Unity project on to the Hololens by running the Visual Studio application
 
-This controller will allow you to run a Unity scene on Windows, in which you can see and move a Hologram Cube. The coordinates of this hologram will be sent through TCP from Unity to ROS, and will be used as goal coordinates for the simulated drone.
+## Usage:
 
-For this type of control, you will have to run Windows in paraller with Ubuntu 18.04 with ROS Melodic installed. You can either use a virtualbox with bridged network connection, or natively run Ubuntu on a separate PC.
+#### Using the Mixed Reality Controller
 
-On Windows, you will have to install the Unitu HUB with Unity 2020 or above, along with the [MRTK-Toolkit](https://docs.microsoft.com/en-us/windows/mixed-reality/develop/unity/mrtk-getting-started) for interaction.
+• Measure the calibration constants such as the transformation constants x, y, z, between the ArUco markers from the ArUco marker with Identity 1, and the distance of the
+ArUco marker identity 1 from the Hololens reference frame.
 
-Also install the [Windows 10 SDK 10.0.18362.0](https://developer.microsoft.com/en-us/windows/downloads/windows-10-sdk/)
+• Mention these constants inside the AruCo Tello pose ROS Node
 
-The main idea of this type of control is to have a **cube** inside a Unity scene and you can move and drag the cube to control the drone simulation inside Gazebo.
+• Launch the Mixed-Reality based drone controller using the *MR-Drone-Controller.launch* launch file of the drone_control package of this project
 
-### Step 1: Setup Unity:
+• This will launch all the required nodes from all the packages
 
-Setup the Unity scene by following the first and third tutorial from [ROS-Unity Integration](https://github.com/Unity-Technologies/Unity-Robotics-Hub/blob/main/tutorials/ros_unity_integration/README.md).
+• Type ’takeoff’ to allow the drone to take off
 
-Remove the **plane** object and follow the section **Importing the Mixed Reality Toolkit and Configuring the Unity project** from [this tutorial](https://docs.microsoft.com/en-us/windows/mixed-reality/develop/unity/tutorials/mr-learning-base-02?tabs=openxr) to add the Mixed Reality ToolKit to your project that will enable you to interact with the cube.
+• As soon as the Tello’s pose estimation is started, type ’track’ to start the hologram tracking
 
-### Step 2: Launch the sjtu-drone
+• Now Grab and place the hologram through the Hololens, to give goal positions to the Tello drone
 
-        roslaunch sjtu_drone simple.launch
-
-
-### Step 3: ROS-Unity Server Setup on Ubuntu
-First find the IP address of your Ubuntu by running the following command in your Terminal
-
-        hostname -I
-        
-Mention this IP in the **params.yaml** file inside the config folder of the ROS-TCP-Endpoint package.
-
-Launch the ROS-Unity Server
-
-        roslaunch ros_tcp_endpoint endpoint.launch
-
-This will start the ROS-Unity connection Server.
-
-        
-### Step 4: Launch the Controller in Ubuntu
-Run the controller node by running the following command
-        
-        rosrun drone_control topic_control.py 
-
-### Step 5: Run the Unity Project
-Inside Unity, Open the Robotics/ROS Settings from the Unity menu bar, and set the ROS IP Address variable to the same IP you set inside Ubuntu.
-
-Press the **play** button and you can see the cube rotating. Press **ctrl** and use an optical mouse to click and drag the cube.
-
-You can now move the cube in Unity, and can see the Simulated Drone moving inside ROS Gazebo.
-
-
-## Third Controller | DJI Tello drone: Control the DJI Tello Drone by sending commands from ROS
-
-This controller allows you to send UDP packets containing control commands to the DJI Tello drone.
-See the [Tello SDK](https://dl-cdn.ryzerobotics.com/downloads/Tello/Tello%20SDK%202.0%20User%20Guide.pdf) for a list of acceptable commands.
-
-### Step 1: Launch the sjtu-drone
-
-    roslaunch sjtu_drone simple.launch
-
-### Step 2: Run the Controller:
-
-    rosrun drone_control tello_server.py 
-    
-First send 'command' to enable the drone to now start receiving SDK Commands.
-The send the control commands to the DJI Tello.
-
-## Fourth Controller | DJI Tello drone: Control the DJI Tello Drone from Unity OR the Hololens2
-
-This controller allows you to send UDP packets containing control commands to the DJI Tello drone.
-See the [Tello SDK](https://dl-cdn.ryzerobotics.com/downloads/Tello/Tello%20SDK%202.0%20User%20Guide.pdf) for a list of acceptable commands.
-
-At first the controller will allow you to send commands to the Drone.
-Later on, if now you want the drone to track the Hologram, you can type 'track', and as done by the second controller, the DJI Tello drone will now use the coordinates of the Cube as the goal coordinates and will reach there autonomously.
-
-### Step 1: ROS-Unity Server Setup on Ubuntu
-First find the IP address of your Ubuntu by running the following command in your Terminal
-
-        hostname -I
-        
-Mention this IP in the **params.yaml** file inside the config folder of the ROS-TCP-Endpoint package.
-
-Launch the ROS-Unity Server
-
-        roslaunch ros_tcp_endpoint endpoint.launch
-
-This will start the ROS-Unity connection Server.
-
-### Step 2: Run the Unity Project
-Inside Unity, Open the Robotics/ROS Settings from the Unity menu bar, and set the ROS IP Address variable to the same IP you set inside Ubuntu.
-
-Press the **play** button and you can see the cube rotating. Press **ctrl** and use an optical mouse to click and drag the cube.
-
-You can now move the cube in Unity, and can see the Simulated Drone moving inside ROS Gazebo.
-
-OR
-
-Build the 'Universal Windows Platform' application from Unity, and then deploy this application on the Hololens2 to interact with the cube.
-
-### Step 3: Run the Controller
-
-    rosrun drone_control tello_server_subtopic.py 
-    
-Now you can just type the command to send and can see the DJI Tello executing these commands.
-
-
-To be continued.
-
-
-
+• Type ’land’ to land the drone
