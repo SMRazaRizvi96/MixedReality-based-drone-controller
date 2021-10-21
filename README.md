@@ -3,19 +3,21 @@
 This project contains a Mixed-Reality based controller for UAV Pilots.
 
 ## Hardware
-*Hololens2
-DJI Tello Drone
-Laptop*
+*Hololens2*
+
+*DJI Tello Drone*
+
+*Laptop*
     
 ## Usage
 The drone pilot will be wearing a Hololens2 that will augment the pilot's vision with a drone hologram and some useful information related to the drone control. The drone pilot will drag and drop the drone hologram to control the drone in the line of sight, and the drone will reach the coordinate of the hologram autonomously.
 
 ## Software Specifications
-*Ubuntu 20.04 running inside a Virtual Box
-ROS Melodic installed in Ubuntu 20.04
-Unity Hub 2.4.3
-Unity 2020.3.13f1
-Visual Studio 2019*
+*Ubuntu 20.04 running inside a Virtual Box*
+*ROS Melodic installed in Ubuntu 20.04*
+*Unity Hub 2.4.3*
+*Unity 2020.3.13f1*
+*Visual Studio 2019*
 
 ## Software Architecture
 The Robot Operating System (ROS1) is used to design the software architecture to provide a communication between the Hololens2 and Ubuntu, and from Ubuntu to the DJI Tello drone.
