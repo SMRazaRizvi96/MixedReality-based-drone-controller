@@ -21,6 +21,9 @@ The drone pilot will be wearing a Hololens2 that will augment the pilot's vision
 The Robot Operating System (ROS1) is used to design the software architecture to provide a communication between the Hololens2 and Ubuntu, and from Ubuntu to the DJI Tello drone.
 On the other hand, in order to develop the Mixed Reality scene for the Hololens2, a Unity project is created, and a Universal Windows Platform application is built to be deployed on the Hololens through Visual Studio.
 
+![alt text](https://github.com/SMRazaRizvi96/MixedReality-based-drone-controller/blob/master/thesis-uml.png)
+
+
 #### Developer:
 [Syed Muhammad Raza Rizvi](https://github.com/SMRazaRizvi96)
 smrazarizvi96@gmail.com
